@@ -1,6 +1,6 @@
 :root {
-    --primary: #521EC6;
-    --bg: #f5f3ff;
+    --primary: #008be8;
+    --bg: lab(97.58% 2.09 -3.6);
     --card: #ffffff;
     --border: #ddd6fe;
     --text-main: #1e1b4b;

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/png" href="favicon.png">
+    <title>Creative Brief Builder - Dipakai Berdua</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="brief.css">
+</head>
+<body>
+
+    <div id="brief-preview-container">
+        <div id="brief-preview"></div>
+    </div>
+
+    <div class="app-container" id="input-ui">
+        <header class="app-header">
+            <div class="main-logo-container">
+                <img src="logo-text-biru.png" alt="Dipakai Berdua Logo" class="app-brand-logo">
+            </div>
+            <h2>Creative Brief Generator</h2>
+        </header>
+
+        <div class="input-card">
+            <label class="section-label">1. Project Information</label>
+            <div class="input-group">
+                <label>Project Name</label>
+                <input type="text" id="cb-project-name" placeholder="e.g. Rebranding & UI/UX Design">
+            </div>
+            <div class="input-group">
+                <label>Client / Brand Name</label>
+                <input type="text" id="cb-client-name" placeholder="e.g. Acme Corp">
+            </div>
+            <div class="input-group">
+                <label>Date</label>
+                <input type="date" id="cb-date">
+            </div>
+            <div class="input-group">
+                <label>Person in Charge (PIC)</label>
+                <input type="text" id="cb-pic" placeholder="e.g. Zaki">
+            </div>
+        </div>
+
+        <div class="input-card">
+            <label class="section-label">2. Objective & Target</label>
+            <div class="input-group">
+                <label>Project Objective</label>
+                <textarea id="cb-objective" rows="3" placeholder="What is the primary goal of this project?"></textarea>
+            </div>
+            <div class="input-group">
+                <label>Target Audience</label>
+                <textarea id="cb-audience" rows="2" placeholder="Who is the primary audience? (Age, profession, interests)"></textarea>
+            </div>
+            <div class="input-group">
+                <label>Key Message</label>
+                <input type="text" id="cb-message" placeholder="The single most important takeaway for the audience">
+            </div>
+        </div>
+
+        <div class="input-card">
+            <label class="section-label">3. Visual Direction</label>
+            <div class="input-group">
+                <label>Tone & Vibe</label>
+                <input type="text" id="cb-tone" placeholder="e.g. Modern, Minimalist, Dark Mode, Playful">
+            </div>
+            <div class="input-group">
+                <label>Color Palette</label>
+                <input type="text" id="cb-colors" placeholder="e.g. Navy Blue & Yellow">
+            </div>
+            <div class="input-group">
+                <label>Design Notes (Text)</label>
+                <textarea id="cb-references" rows="3" placeholder="Provide text descriptions or links for the references"></textarea>
+            </div>
+        </div>
+
+        <div class="items-section" style="margin-bottom: 20px;">
+            <label class="section-label">4. Visual References (Optional)</label>
+            <div id="references-list"></div>
+            <button class="btn-add-item" onclick="addReferenceItem()">
+                + Add Reference Image
+            </button>
+        </div>
+
+        <div class="input-card">
+            <label class="section-label">5. Deliverables & Constraints</label>
+            <div class="input-group">
+                <label>Deliverables (Expected Outputs)</label>
+                <textarea id="cb-deliverables" rows="3" placeholder="e.g.&#10;1x Logo Vector (AI/EPS)&#10;1x Motion Graphic 30s (MP4)"></textarea>
+            </div>
+            <div class="input-group">
+                <label>Competitors</label>
+                <input type="text" id="cb-competitors" placeholder="List 2-3 main competitors">
+            </div>
+            <div class="input-group">
+                <label>Mandatory Elements</label>
+                <input type="text" id="cb-mandatory" placeholder="e.g. Sponsor logos, corporate fonts">
+            </div>
+        </div>
+
+        <button class="btn-generate" onclick="generateBrief()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Generate Creative Brief PDF
+        </button>
+    </div>
+
+    <script src="brief.js"></script>
+</body>
+</html>

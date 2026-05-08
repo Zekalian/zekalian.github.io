@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proposal Builder - Dipakai Berdua</title>
-    <link rel="icon" type="image/png" href="Logo_Dipakaiberuda.png">
+    <link rel="icon" type="image/png" href="favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="proposal.css">
 </head>
@@ -17,7 +17,7 @@
     <div class="app-container" id="input-ui">
         <header class="app-header">
             <div class="main-logo-container">
-                <img src="Logo_Dipakaiberuda.png" alt="Dipakai Berdua Logo" class="app-brand-logo">
+                <img src="logo-text-biru.png" alt="Dipakai Berdua Logo" class="app-brand-logo">
             </div>
             <h2>Proposal Generator</h2>
         </header>
@@ -54,7 +54,7 @@
             <label class="section-label">1. Project Overview</label>
             <div class="input-group">
                 <label>Project Title</label>
-                <input type="text" id="prop-title" value="Brand Identity & Motion Graphic Proposal">
+                <input type="text" id="prop-title" placeholder="Brand Identity & Motion Graphic Proposal">
             </div>
             <div class="input-group">
                 <label>Background & Objective</label>
@@ -75,12 +75,21 @@
             <button class="btn-add-item" onclick="addNewItem()">+ Add Project Item</button>
         </div>
 
+        <div class="items-section">
+            <label class="section-label">4. Reference Images (Optional)</label>
+            <div id="references-list"></div>
+            <button class="btn-add-item" onclick="addReferenceItem()" style="border-color: #8b5cf6; color: #8b5cf6;">
+                + Add Reference Image
+            </button>
+        </div>
+
         <div class="input-card">
-            <label class="section-label">4. Terms & Next Steps</label>
+            <label class="section-label">5. Terms & Next Steps</label>
             <div class="input-group">
                 <textarea id="prop-terms" rows="4">1. Pembayaran DP 50% sebelum project dimulai.&#10;2. Pelunasan 50% setelah final file diserahkan.&#10;3. Maksimal 2x revisi minor per item.&#10;4. Jika setuju, silakan tandatangani proposal ini.</textarea>
             </div>
         </div>
+
 
         <button class="btn-generate" onclick="generateProposal()">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zekalian Internal Portal</title>
+    <link rel="icon" type="image/png" href="favicon.png">    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+    <div class="container" id="login-section">
+        <div class="logo-container">
+            <img src="logo-text-biru.png" alt="Zekalian Logo">
+        </div>
+        <h2>Restricted Access</h2>
+        <p class="subtitle">Zekalian Internal Tools</p>
+        
+        <div class="input-group">
+            <input type="password" id="pass-input" placeholder="Enter Access Code" onkeypress="handleEnter(event)">
+            <p id="error-msg" class="error-msg">Kode akses salah!</p>
+        </div>
+        
+        <button class="btn-primary" onclick="checkLogin()">Login to Portal</button>
+    </div>
+
+    <div class="container dashboard" id="dashboard-section" style="display: none;">
+        <div class="logo-container">
+            <img src="logo-text-biru.png" alt="Zekalian Logo">
+        </div>
+        <h2>Zekalian Workspace</h2>
+        <p class="subtitle" style="margin-bottom: 30px;">Pilih tools yang ingin digunakan</p>
+
+        <div class="tools-grid">
+            <a href="Proposal/proposal.html" class="tool-card">
+                <div class="tool-icon">📝</div>
+                <h3>Proposal Builder</h3>
+                <p>Buat penawaran project baru</p>
+            </a>
+            
+            <a href="Invoice/invoicebuilder.html" class="tool-card">
+                <div class="tool-icon">🧾</div>
+                <h3>Invoice Generator</h3>
+                <p>Buat tagihan pembayaran klien</p>
+            </a>
+            
+            <a href="Brief/brief.html" class="tool-card">
+                <div class="tool-icon">🎯</div>
+                <h3>Creative Brief</h3>
+                <p>Susun panduan & tujuan project</p>
+            </a>
+            
+            <a href="Shotlist/shotlist.html" class="tool-card">
+                <div class="tool-icon">🎬</div>
+                <h3>Storyboard</h3>
+                <p>Buat shotlist untuk produksi</p>
+            </a>
+        </div>
+
+        <button class="btn-logout" onclick="logout()">🔒 Lock Workspace</button>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

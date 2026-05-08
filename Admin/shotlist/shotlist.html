@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storyboard Builder - Zekalian</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shotlist.css">
+</head>
+<body>
+
+    <div id="shotlist-preview-container">
+        <div id="shotlist-preview"></div>
+    </div>
+
+    <div class="app-container" id="input-ui">
+        <header class="app-header">
+            <div class="main-logo-container">
+                <img src="logo-text-biru.png" alt="Zekalian Logo" class="app-brand-logo">
+            </div>
+            <h2>Storyboard & Shotlist Builder</h2>
+            <p style="color: #6366f1; font-size: 14px; font-weight: 500;">Production Tools</p>
+        </header>
+
+        <div class="input-card">
+            <label class="section-label">1. Project Information</label>
+            <div class="input-group">
+                <label>Project Name</label>
+                <input type="text" id="sb-project" placeholder="e.g. TVC Campaign Acme Corp">
+            </div>
+            <div class="input-group">
+                <label>Shooting Location</label>
+                <input type="text" id="sb-location" placeholder="e.g. Studio A / Outdoor Cafe">
+            </div>
+            <div class="input-group">
+                <label>Shooting Date</label>
+                <input type="date" id="sb-date">
+            </div>
+        </div>
+
+        <div class="items-section">
+            <label class="section-label">2. Scene / Shot List</label>
+            <div id="shots-list"></div>
+            <button class="btn-add-item" onclick="addShot()">
+                + Add New Shot
+            </button>
+        </div>
+
+        <button class="btn-generate" onclick="generateShotlist()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+            Generate Storyboard PDF
+        </button>
+    </div>
+
+    <script src="shotlist.js"></script>
+</body>
+</html>

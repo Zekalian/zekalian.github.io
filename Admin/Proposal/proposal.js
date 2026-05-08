@@ -1,14 +1,17 @@
 let items = [{ desc: '', price: 0 }];
+let refItems = []; // Array untuk menyimpan referensi gambar
 
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('prop-date').valueAsDate = new Date();
     renderItems();
+    renderRefItems(); // Render referensi kosong saat dimuat
 });
 
 function formatCurrency(amount) {
     return "Rp " + amount.toLocaleString('id-ID');
 }
 
+// --- FUNGSI UNTUK SECTION 3 (SCOPE OF WORK) ---
 function renderItems() {
     const container = document.getElementById('items-list');
     container.innerHTML = '';
@@ -41,15 +44,64 @@ function renderItems() {
 
 function addNewItem() { items.push({ desc: '', price: 0 }); renderItems(); }
 function removeItem(index) { if (items.length > 1) { items.splice(index, 1); renderItems(); } }
-
 function updateItem(index, key, val) {
-    if (key === 'desc') {
-        items[index][key] = val;
-    } else {
-        items[index][key] = parseFloat(val) || 0;
+    if (key === 'desc') items[index][key] = val;
+    else items[index][key] = parseFloat(val) || 0;
+}
+
+// --- FUNGSI UNTUK SECTION 5 (REFERENCES) ---
+function renderRefItems() {
+    const container = document.getElementById('references-list');
+    container.innerHTML = '';
+
+    refItems.forEach((item, index) => {
+        const html = `
+            <div class="item-card">
+                <div class="item-header-badge" style="background: #8b5cf6;">Reference ${index + 1}</div>
+                <button class="btn-remove" style="background: #ef4444;" onclick="removeRefItem(${index})">✕</button>
+                
+                <div class="input-group" style="margin-top: 15px;">
+                    <label>Image Title</label>
+                    <input type="text" placeholder="e.g. 3D Character Concept" 
+                           value="${item.title || ''}" oninput="updateRefItem(${index}, 'title', this.value)">
+                </div>
+                
+                <div class="input-group">
+                    <label>Upload Image</label>
+                    <input type="file" accept="image/*" onchange="handleImageUpload(event, ${index})">
+                    <div class="img-preview-box">
+                        ${item.imgUrl ? `<img src="${item.imgUrl}">` : '<span style="color:#aaa; font-size:12px;">No image selected</span>'}
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Brief Description</label>
+                    <textarea rows="2" placeholder="Jelaskan alasan referensi ini dipilih..." 
+                              oninput="updateRefItem(${index}, 'desc', this.value)">${item.desc || ''}</textarea>
+                </div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+    });
+}
+
+function addReferenceItem() { refItems.push({ title: '', imgUrl: '', desc: '' }); renderRefItems(); }
+function removeRefItem(index) { refItems.splice(index, 1); renderRefItems(); }
+function updateRefItem(index, key, val) { refItems[index][key] = val; }
+
+function handleImageUpload(event, index) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            refItems[index].imgUrl = e.target.result; // Simpan sebagai Base64 string
+            renderRefItems(); // Refresh tampilan
+        };
+        reader.readAsDataURL(file);
     }
 }
 
+// --- FUNGSI RENDER PDF ---
 function generateProposal() {
     const preview = document.getElementById('proposal-preview');
 
@@ -79,15 +131,45 @@ function generateProposal() {
         `;
     });
 
+    // Cek apakah ada referensi yang valid (minimal salah satu field diisi)
+    const validRefs = refItems.filter(r => r.title || r.imgUrl || r.desc);
+    
+    let termsNumber = "4"; // Default nomor untuk Terms jika referensi kosong
+    let referencesHtml = ''; // Penampung HTML referensi
+
+    if (validRefs.length > 0) {
+        termsNumber = "5"; // Geser Terms ke nomor 5
+
+        let refGrids = '';
+        validRefs.forEach(ref => {
+            refGrids += `
+                <div class="pdf-ref-item">
+                    ${ref.imgUrl ? `<img src="${ref.imgUrl}">` : ''}
+                    ${ref.title ? `<h4>${ref.title}</h4>` : ''}
+                    ${ref.desc ? `<p>${ref.desc}</p>` : ''}
+                </div>
+            `;
+        });
+
+        referencesHtml = `
+            <div class="pdf-section">
+                <h2>4. Reference & Visual Guideline</h2>
+                <div class="pdf-references">
+                    ${refGrids}
+                </div>
+            </div>
+        `;
+    }
+
     preview.innerHTML = `
         <div class="pdf-render">
             <div class="pdf-header">
                 <div>
                     <h1>PROPOSAL</h1>
-                    <p style="font-size:16px; color:#6366f1; font-weight:600; margin-top:5px;">${title}</p>
+                    <h2>${title}</h2>
                 </div>
                 <div class="pdf-meta">
-                    <img src="Logo_Dipakaiberuda.png" alt="Logo">
+                    <img src="logo-text-biru.png" alt="Logo"> 
                     <p>Date: <b>${propDate}</b></p>
                     <p>No: <b>${propNo}</b></p>
                     <p>Valid For: <b>${propValid}</b></p>
@@ -104,8 +186,8 @@ function generateProposal() {
                 </div>
                 <div class="pdf-prepared-box" style="text-align:right;">
                     <h3>Prepared By</h3>
-                    <strong>Dipakai Berdua</strong>
-                    <p>Creative Studio, Pekanbaru<br>hello@dipakaiberdua.com</p>
+                    <strong>Zekalian</strong>
+                    <p>Pekanbaru<br>hello@dipakaiberdua.com</p>
                 </div>
             </div>
 
@@ -138,15 +220,17 @@ function generateProposal() {
                 </table>
             </div>
 
+            ${referencesHtml}
+            
             <div class="pdf-section" style="page-break-inside: avoid;">
-                <h2>4. Terms & Next Steps</h2>
+                <h2>${termsNumber}. Terms & Next Steps</h2>
                 <pre>${terms}</pre>
                 
                 <div class="pdf-signatures">
                     <div class="sign-box">
                         <p>Accepted By (Client)</p>
                         <div class="sign-line"></div>
-                        <span>Name / Signature / Date</span>
+                        <span>${clientName}</span>
                     </div>
                     <div class="sign-box">
                         <p>Prepared By</p>
@@ -155,10 +239,11 @@ function generateProposal() {
                     </div>
                 </div>
             </div>
+
         </div>
     `;
 
     setTimeout(() => {
         window.print();
-    }, 150);
+    }, 250); // Waktu jeda diperpanjang sedikit agar render gambar base64 lebih aman
 }

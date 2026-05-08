@@ -126,7 +126,7 @@ function generateAndDownload() {
                     <h1>INVOICE</h1>
                 </div>
                 <div class="pdf-meta-side">
-                    <img src="Logo_Dipakaiberuda.png" alt="Logo" style="width: 200px; height: auto; margin-bottom: 15px;">
+                    <img src="logo-text-biru.png" alt="Logo" style="width: 200px; height: auto; margin-bottom: 15px;">
                     <p>Date: <b>${invDate}</b></p>
                     <p>No: <b>${invNo}</b></p>
                 </div>
@@ -167,7 +167,7 @@ function generateAndDownload() {
                 </div>
                 <div class="pdf-from-info" style="text-align:right">
                     <h3>Issued By</h3>
-                    <p><b>Dipakai Berdua</b></p>
+                    <p><b>Zekalian</b></p>
                     <p>Pekanbaru</p>
                 </div>
             </div>
