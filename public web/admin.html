@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <title>Admin Dashboard | Zekalian</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body style="background-color: var(--bg-light);">
+
+    <main style="padding: 4rem 2rem;">
+        <div class="container" style="max-width: 800px; background: var(--white); padding: 3rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h1 style="font-size: 2rem;">Zekalian Admin Panel</h1>
+                <p>Generate new portfolio card code easily.</p>
+            </div>
+
+            <div class="contact-form">
+                <!-- Form Input Portofolio -->
+                <div style="margin-bottom: 1rem;">
+                    <label style="font-weight: 600; margin-bottom: 0.5rem; display: block;">Project Title</label>
+                    <input type="text" id="workTitle" placeholder="e.g. Video Profile UNRI" style="width: 100%; padding: 1rem; border: 1px solid #CBD5E1; border-radius: 10px;">
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                    <label style="font-weight: 600; margin-bottom: 0.5rem; display: block;">Category</label>
+                    <input type="text" id="workCategory" placeholder="e.g. Video Production" style="width: 100%; padding: 1rem; border: 1px solid #CBD5E1; border-radius: 10px;">
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                    <label style="font-weight: 600; margin-bottom: 0.5rem; display: block;">Image URL / YouTube Thumbnail URL</label>
+                    <input type="text" id="workImage" placeholder="e.g. logo/1.jpg or https://... " style="width: 100%; padding: 1rem; border: 1px solid #CBD5E1; border-radius: 10px;">
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                    <label style="font-weight: 600; margin-bottom: 0.5rem; display: block;">Target Link (HTML Page / YouTube Link)</label>
+                    <input type="text" id="workLink" placeholder="e.g. unri-project.html or https://youtube.com/..." style="width: 100%; padding: 1rem; border: 1px solid #CBD5E1; border-radius: 10px;">
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="font-weight: 600; margin-bottom: 0.5rem; display: block;">Short Description</label>
+                    <textarea id="workDesc" rows="3" placeholder="A brief description of the project..." style="width: 100%; padding: 1rem; border: 1px solid #CBD5E1; border-radius: 10px; resize: vertical;"></textarea>
+                </div>
+
+                <button onclick="generateCode()" class="btn" style="width: 100%;">Generate HTML Code</button>
+            </div>
+
+            <!-- Area Hasil Kode -->
+            <div id="resultArea" style="display: none; margin-top: 3rem;">
+                <h3 style="color: var(--success-green);">✨ Code Generated!</h3>
+                <p>Copy the code below and paste it inside the <code>&lt;div class="portfolio-grid"&gt;</code> in your <b>works.html</b> file.</p>
+                
+                <div style="position: relative;">
+                    <textarea id="outputCode" readonly style="width: 100%; height: 250px; padding: 1rem; font-family: monospace; font-size: 0.9rem; background-color: #1E293B; color: #64FFDA; border-radius: 10px; border: none; outline: none;"></textarea>
+                    <button onclick="copyCode()" class="btn" style="position: absolute; top: 10px; right: 10px; padding: 0.5rem 1rem; font-size: 0.85rem;">Copy Code</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- JavaScript Khusus Admin Generator -->
+    <script>
+        function generateCode() {
+            const title = document.getElementById("workTitle").value || "New Project";
+            const category = document.getElementById("workCategory").value || "Category";
+            const image = document.getElementById("workImage").value || "https://via.placeholder.com/400x300.png?text=Project";
+            const link = document.getElementById("workLink").value || "#";
+            const desc = document.getElementById("workDesc").value || "";
+
+            const htmlTemplate = `
+<div class="portfolio-card hidden-element">
+    <div class="portfolio-img-wrapper">
+        <img src="${image}" alt="${title}" onerror="this.src='https://via.placeholder.com/400x300.png?text=Image+Not+Found'">
+    </div>
+    <div class="portfolio-info">
+        <h3>${title}</h3>
+        <p>${category}</p>
+        ${desc ? `<p style="font-size: 0.9rem; color: #64748B; margin-top: 0.5rem; text-transform: none; font-weight: normal; letter-spacing: 0;">${desc}</p>` : ''}
+        <a href="${link}" class="read-more" target="_blank">View Details &rarr;</a>
+    </div>
+</div>`;
+
+            document.getElementById("outputCode").value = htmlTemplate.trim();
+            document.getElementById("resultArea").style.display = "block";
+        }
+
+        function copyCode() {
+            const copyText = document.getElementById("outputCode");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // Untuk HP
+            navigator.clipboard.writeText(copyText.value);
+            alert("Code copied to clipboard! Now paste it into works.html");
+        }
+    </script>
+</body>
+</html>

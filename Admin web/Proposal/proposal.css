@@ -1,0 +1,75 @@
+:root {
+    --primary: #521EC6;
+    --bg: #f5f3ff;
+    --card: #ffffff;
+    --border: #ddd6fe;
+    --text-main: #1e1b4b;
+    --text-sub: #6366f1;
+    --radius-lg: 24px;
+    --radius-md: 14px;
+    --danger: #ef4444;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+
+body { background-color: var(--bg); color: var(--text-main); display: flex; justify-content: center; padding: 40px 15px; }
+
+/* UI Aplikasi (Sama dengan Invoice) */
+.app-container { width: 100%; max-width: 550px; position: relative; z-index: 1; }
+.app-header { margin-bottom: 30px; text-align: center; }
+.app-brand-logo { max-width: 200px; height: auto; margin-bottom: 10px; }
+.app-header h2 { font-size: 22px; font-weight: 800; color: var(--primary); }
+
+.input-card { background: var(--card); border-radius: var(--radius-lg); padding: 25px; margin-bottom: 20px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(82, 30, 198, 0.05); }
+.section-label { font-weight: 800; font-size: 13px; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 20px; }
+.input-group { margin-bottom: 15px; }
+.input-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--text-main); }
+input, textarea { width: 100%; border: 2px solid var(--border); background: #fafafa; padding: 12px 15px; border-radius: var(--radius-md); font-size: 14px; outline: none; transition: 0.25s; color: var(--text-main); }
+input:focus, textarea:focus { border-color: var(--primary); background: #fff; }
+
+.item-card { background: #fdfcff; border-radius: var(--radius-md); padding: 20px; margin-bottom: 15px; position: relative; border: 2px solid var(--border); }
+.item-header-badge { position: absolute; top: -12px; left: 15px; background: var(--primary); color: white; font-size: 11px; font-weight: 800; padding: 4px 12px; border-radius: 20px; }
+.btn-remove { position: absolute; top: -10px; right: -10px; background: var(--danger); color: white; border: none; width: 26px; height: 26px; border-radius: 50%; cursor: pointer; }
+.prefix-wrapper { position: relative; display: flex; align-items: center; }
+.prefix-wrapper span { position: absolute; left: 15px; color: var(--primary); font-weight: 700; font-size: 14px; }
+.prefix-wrapper input { padding-left: 45px; }
+.btn-add-item { width: 100%; background: #fff; border: 2px dashed var(--primary); padding: 15px; border-radius: var(--radius-md); color: var(--primary); font-weight: 700; cursor: pointer; margin-bottom: 20px; }
+.btn-generate { width: 100%; background: var(--primary); color: white; border: none; padding: 20px; border-radius: var(--radius-lg); font-size: 16px; font-weight: 800; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; }
+
+/* Tampilan PDF / Cetak */
+#proposal-preview-container { display: none; }
+.pdf-render { background: white; color: #1e1b4b; padding: 60px; line-height: 1.6; font-size: 14px; }
+
+.pdf-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+.pdf-header h1 { font-size: 45px; font-weight: 900; color: var(--primary); letter-spacing: -1px; }
+.pdf-meta { text-align: right; }
+.pdf-meta img { max-width: 180px; margin-bottom: 15px; }
+.header-divider { height: 3px; background-color: var(--primary); margin-bottom: 40px; }
+
+.pdf-prepared { margin-bottom: 40px; display: flex; justify-content: space-between; }
+.pdf-prepared-box h3 { font-size: 12px; text-transform: uppercase; color: var(--primary); margin-bottom: 8px; }
+.pdf-prepared-box p { font-size: 15px; }
+.pdf-prepared-box strong { font-size: 18px; display: block; margin-bottom: 5px; }
+
+.pdf-section { margin-bottom: 40px; }
+.pdf-section h2 { font-size: 18px; color: var(--primary); border-bottom: 2px solid #eef2ff; padding-bottom: 10px; margin-bottom: 15px; }
+.pdf-section p, .pdf-section pre { white-space: pre-wrap; font-family: 'Inter', sans-serif; font-size: 15px; color: #333; }
+
+.pdf-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+.pdf-table th { text-align: left; padding: 12px; background: #fdfcff; border-bottom: 3px solid var(--primary); font-size: 13px; color: var(--primary); }
+.pdf-table td { padding: 15px 12px; border-bottom: 1px solid #eef2ff; font-size: 15px; }
+.pdf-total-row td { font-weight: 800; font-size: 18px; color: var(--primary); border-top: 3px solid var(--primary); }
+
+.pdf-signatures { display: flex; justify-content: space-between; margin-top: 70px; page-break-inside: avoid; }
+.sign-box { width: 45%; text-align: center; }
+.sign-box p { font-size: 14px; font-weight: 600; color: var(--text-sub); margin-bottom: 80px; }
+.sign-line { border-top: 2px solid var(--text-main); margin: 0 auto 5px auto; width: 80%; }
+.sign-box span { font-size: 12px; color: #666; }
+
+@media print {
+    body { background: white !important; margin: 0; padding: 0; }
+    #input-ui { display: none !important; }
+    #proposal-preview-container { display: block !important; position: absolute; left: 0; top: 0; width: 100%; z-index: 1; }
+    .pdf-render { width: 100% !important; padding: 0 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    @page { size: A4 portrait; margin: 15mm; }
+}

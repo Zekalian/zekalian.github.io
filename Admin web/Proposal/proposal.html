@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proposal Builder - Dipakai Berdua</title>
+    <link rel="icon" type="image/png" href="Logo_Dipakaiberuda.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="proposal.css">
+</head>
+<body>
+
+    <div id="proposal-preview-container">
+        <div id="proposal-preview"></div>
+    </div>
+
+    <div class="app-container" id="input-ui">
+        <header class="app-header">
+            <div class="main-logo-container">
+                <img src="Logo_Dipakaiberuda.png" alt="Dipakai Berdua Logo" class="app-brand-logo">
+            </div>
+            <h2>Proposal Generator</h2>
+        </header>
+
+        <div class="input-card">
+            <label class="section-label">Document Info</label>
+            <div class="input-group">
+                <label>Proposal Number</label>
+                <input type="text" id="prop-no" value="PRP/2026/001">
+            </div>
+            <div class="input-group">
+                <label>Date</label>
+                <input type="date" id="prop-date">
+            </div>
+            <div class="input-group">
+                <label>Valid Until</label>
+                <input type="text" id="prop-valid" value="14 Days">
+            </div>
+        </div>
+
+        <div class="input-card">
+            <label class="section-label">Prepared For (Client)</label>
+            <div class="input-group">
+                <label>Client / Company Name</label>
+                <input type="text" id="prop-client-name" placeholder="e.g. Acme Corp">
+            </div>
+            <div class="input-group">
+                <label>Address / Contact</label>
+                <textarea id="prop-client-address" placeholder="Client's details..." rows="2"></textarea>
+            </div>
+        </div>
+
+        <div class="input-card">
+            <label class="section-label">1. Project Overview</label>
+            <div class="input-group">
+                <label>Project Title</label>
+                <input type="text" id="prop-title" value="Brand Identity & Motion Graphic Proposal">
+            </div>
+            <div class="input-group">
+                <label>Background & Objective</label>
+                <textarea id="prop-overview" rows="4" placeholder="Jelaskan secara singkat masalah klien dan solusi yang Anda tawarkan..."></textarea>
+            </div>
+        </div>
+
+        <div class="input-card">
+            <label class="section-label">2. Project Timeline</label>
+            <div class="input-group">
+                <textarea id="prop-timeline" rows="4" placeholder="Misal:&#10;Fase 1: Riset & Konsep (Minggu 1)&#10;Fase 2: Desain Visual (Minggu 2)&#10;Fase 3: Revisi & Finalisasi (Minggu 3)"></textarea>
+            </div>
+        </div>
+
+        <div class="items-section">
+            <label class="section-label">3. Scope of Work & Investment</label>
+            <div id="items-list"></div>
+            <button class="btn-add-item" onclick="addNewItem()">+ Add Project Item</button>
+        </div>
+
+        <div class="input-card">
+            <label class="section-label">4. Terms & Next Steps</label>
+            <div class="input-group">
+                <textarea id="prop-terms" rows="4">1. Pembayaran DP 50% sebelum project dimulai.&#10;2. Pelunasan 50% setelah final file diserahkan.&#10;3. Maksimal 2x revisi minor per item.&#10;4. Jika setuju, silakan tandatangani proposal ini.</textarea>
+            </div>
+        </div>
+
+        <button class="btn-generate" onclick="generateProposal()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Generate Proposal PDF
+        </button>
+    </div>
+
+    <script src="proposal.js"></script>
+</body>
+</html>
