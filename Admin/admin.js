@@ -2,7 +2,7 @@
 const ACCESS_CODE = "zekalianberdua"; 
 
 let inactivityTimer; 
-const IDLE_TIME = 10000; // 10 detik
+const IDLE_TIME = 60000; // 60 detik
 
 // Langsung inisialisasi saat file terbaca
 initPortal();
