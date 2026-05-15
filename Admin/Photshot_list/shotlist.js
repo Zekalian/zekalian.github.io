@@ -67,7 +67,10 @@ function renderShots() {
                                   oninput="updateShot(${index}, 'notes', this.value)">${shot.notes}</textarea>
                     </div>
                     <div class="input-group">
-                        <label>Visual Ref. (Upload Multiple)</label>
+                        <label style="display: flex; justify-content: space-between;">
+                            Visual Ref. (Upload)
+                            <span style="color: #ef4444; cursor: pointer; font-size: 11px; font-weight: 800;" onclick="clearImages(${index})">Hapus Foto</span>
+                        </label>
                         <input type="file" accept="image/*" multiple onchange="handleShotImages(event, ${index})">
                         <div class="img-preview-box">
                             ${previewImagesHtml}
@@ -97,8 +100,7 @@ function updateShot(index, key, val) {
 function handleShotImages(event, index) {
     const files = Array.from(event.target.files);
     if (files.length === 0) return;
-
-    shots[index].imgUrls = [];
+    
     let loadedCount = 0;
 
     files.forEach(file => {
@@ -113,6 +115,11 @@ function handleShotImages(event, index) {
         };
         reader.readAsDataURL(file);
     });
+}
+
+function clearImages(index) {
+    shots[index].imgUrls = [];
+    renderShots();
 }
 
 function generateShotlist() {
