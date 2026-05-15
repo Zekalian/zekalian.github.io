@@ -94,10 +94,64 @@ input:focus, textarea:focus { border-color: var(--primary); background: #fff; }
 .sb-label { font-weight: 700; color: var(--primary); font-size: 10px; text-transform: uppercase; }
 .sb-value { font-size: 11px; white-space: pre-wrap; line-height: 1.4; }
 
-@media print {
-    body { background: white !important; margin: 0; padding: 0; }
-    #input-ui { display: none !important; }
-    #shotlist-preview-container { display: block !important; position: absolute; left: 0; top: 0; width: 100%; z-index: 1; }
-    .pdf-render { width: 100% !important; padding: 0 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    @page { size: A4 landscape; margin: 10mm; } 
-}
+/* ========================================================= */
+        /* PERBAIKAN TOTAL: CSS KHUSUS PRINT (PENCETAKAN PDF)        */
+        /* ========================================================= */
+        @media print {
+            /* Set margin kertas ke 0 untuk memaksa browser menyembunyikan header/footer URL bawaan */
+            @page { size: A4 landscape; margin: 0; } 
+            
+            body { 
+                background: white !important; 
+                margin: 0 !important; 
+                padding: 10mm !important; /* Pindahkan margin kertas ke body agar isi tidak mepet layar */
+                -webkit-print-color-adjust: exact !important; 
+                print-color-adjust: exact !important;
+            }
+
+            #input-ui { display: none !important; }
+            #shotlist-preview-container { display: block !important; position: static !important; width: 100%; }
+            .pdf-render { width: 100% !important; padding: 0 !important; }
+            
+            .pdf-storyboard-grid { 
+                display: block !important; 
+            }
+
+            .sb-card { 
+                display: inline-block !important; 
+                width: 48% !important; 
+                margin-right: 1.5% !important;
+                margin-bottom: 15px !important;
+                vertical-align: top !important; 
+                page-break-inside: avoid !important; 
+                break-inside: avoid !important; 
+                -webkit-column-break-inside: avoid !important; 
+                border: 2px solid #1e1b4b !important;
+                position: relative !important;
+            }
+
+            /* Batasi ketat kotak gambar agar tidak jebol ke bawah jika foto banyak */
+            .sb-img-container {
+                display: flex !important;
+                flex-wrap: wrap !important;
+                justify-content: center !important;
+                align-items: center !important;
+                gap: 5px !important;
+                max-height: 220px !important; /* Kunci utamanya di sini: Batasi tinggi maksimal */
+                overflow: hidden !important; /* Jika gambar kebanyakan, potong sisanya agar layout selamat */
+                padding: 8px !important;
+            }
+
+            /* Seragamkan ukuran gambar saat di PDF */
+            .sb-img-container img {
+                height: 100px !important; /* Buat gambar lebih proporsional saat bersebelahan */
+                width: auto !important;
+                max-width: 48% !important; /* Mencegah 1 gambar memakan seluruh lebar */
+                object-fit: contain !important;
+            }
+
+            .sb-details-row {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+        }
