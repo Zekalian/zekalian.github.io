@@ -30,8 +30,30 @@ input:focus, textarea:focus { border-color: var(--primary); background: #fff; }
 .btn-add-item { width: 100%; background: #fff; border: 2px dashed var(--primary); padding: 15px; border-radius: var(--radius-md); color: var(--primary); font-weight: 700; cursor: pointer; margin-bottom: 20px; }
 
 .grid-2-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.img-preview-box { width: 100%; height: 120px; border: 2px dashed var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #fafafa; margin-top: 5px; }
-.img-preview-box img { width: 100%; height: 100%; object-fit: cover; }
+.grid-3-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+.img-preview-box { 
+    width: 100%; 
+    height: 120px; 
+    border: 2px dashed var(--border); 
+    border-radius: 8px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: flex-start;
+    overflow-x: auto;
+    gap: 8px; 
+    padding: 8px; 
+    background: #fafafa; 
+    margin-top: 5px; 
+}
+
+.img-preview-box img { 
+    height: 100%; 
+    width: auto; 
+    object-fit: contain; 
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
 
 .btn-generate { width: 100%; background: var(--primary); color: white; border: none; padding: 20px; border-radius: var(--radius-lg); font-size: 16px; font-weight: 800; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; }
 
@@ -45,11 +67,29 @@ input:focus, textarea:focus { border-color: var(--primary); background: #fff; }
 
 .pdf-storyboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .sb-card { border: 2px solid #1e1b4b; border-radius: 6px; overflow: hidden; page-break-inside: avoid; display: flex; flex-direction: column; }
-.sb-img-container { height: 180px; background: #f0f0f0; border-bottom: 2px solid #1e1b4b; display: flex; justify-content: center; align-items: center; }
-.sb-img-container img { width: 100%; height: 100%; object-fit: cover; }
+
+.sb-img-container { 
+    min-height: 180px; 
+    padding: 10px;
+    background: #f0f0f0; 
+    border-bottom: 2px solid #1e1b4b; 
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+    align-items: center; 
+    gap: 10px;
+}
+
+.sb-img-container img { 
+    max-height: 160px; 
+    width: auto; 
+    max-width: 100%; 
+    object-fit: contain; 
+}
+
 .sb-header-bar { background: #1e1b4b; color: white; padding: 6px 10px; font-weight: 800; display: flex; justify-content: space-between; }
 .sb-details { padding: 10px; flex-grow: 1; }
-.sb-details-row { display: grid; grid-template-columns: 80px 1fr; margin-bottom: 6px; border-bottom: 1px dashed #ccc; padding-bottom: 4px; }
+.sb-details-row { display: grid; grid-template-columns: 90px 1fr; margin-bottom: 6px; border-bottom: 1px dashed #ccc; padding-bottom: 4px; }
 .sb-details-row:last-child { border-bottom: none; }
 .sb-label { font-weight: 700; color: var(--primary); font-size: 10px; text-transform: uppercase; }
 .sb-value { font-size: 11px; white-space: pre-wrap; line-height: 1.4; }
@@ -59,11 +99,5 @@ input:focus, textarea:focus { border-color: var(--primary); background: #fff; }
     #input-ui { display: none !important; }
     #shotlist-preview-container { display: block !important; position: absolute; left: 0; top: 0; width: 100%; z-index: 1; }
     .pdf-render { width: 100% !important; padding: 0 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    @page { size: A4 landscape; margin: 10mm; } /* Memakai format Landscape agar gambar lebih lebar */
+    @page { size: A4 landscape; margin: 10mm; } 
 }
-
-/* Tambahan Grid baru untuk UI Input */
-.grid-3-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-
-/* Penyesuaian layout PDF Card untuk foto */
-.sb-details-row { display: grid; grid-template-columns: 90px 1fr; margin-bottom: 6px; border-bottom: 1px dashed #ccc; padding-bottom: 4px; }

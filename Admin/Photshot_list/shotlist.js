@@ -1,5 +1,5 @@
 let shots = [{ 
-    shotNo: '1', description: '', framing: '', talent: '', equipment: '', props: '', notes: '', imgUrl: '' 
+    shotNo: '1', description: '', framing: '', talent: '', equipment: '', props: '', notes: '', imgUrls: [] 
 }];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,6 +12,11 @@ function renderShots() {
     container.innerHTML = '';
 
     shots.forEach((shot, index) => {
+        let previewImagesHtml = '<span style="color:#aaa; font-size:11px;">No image</span>';
+        if (shot.imgUrls && shot.imgUrls.length > 0) {
+            previewImagesHtml = shot.imgUrls.map(url => `<img src="${url}">`).join('');
+        }
+
         const html = `
             <div class="item-card">
                 <div class="item-header-badge">Photo ${index + 1}</div>
@@ -62,10 +67,10 @@ function renderShots() {
                                   oninput="updateShot(${index}, 'notes', this.value)">${shot.notes}</textarea>
                     </div>
                     <div class="input-group">
-                        <label>Visual Ref. (Upload)</label>
-                        <input type="file" accept="image/*" onchange="handleShotImage(event, ${index})">
+                        <label>Visual Ref. (Upload Multiple)</label>
+                        <input type="file" accept="image/*" multiple onchange="handleShotImages(event, ${index})">
                         <div class="img-preview-box">
-                            ${shot.imgUrl ? `<img src="${shot.imgUrl}">` : '<span style="color:#aaa; font-size:11px;">No image</span>'}
+                            ${previewImagesHtml}
                         </div>
                     </div>
                 </div>
@@ -76,7 +81,7 @@ function renderShots() {
 }
 
 function addShot() { 
-    shots.push({ shotNo: `${shots.length + 1}`, description: '', framing: '', talent: '', equipment: '', props: '', notes: '', imgUrl: '' }); 
+    shots.push({ shotNo: `${shots.length + 1}`, description: '', framing: '', talent: '', equipment: '', props: '', notes: '', imgUrls: [] }); 
     renderShots(); 
 }
 
@@ -89,16 +94,25 @@ function updateShot(index, key, val) {
     shots[index][key] = val; 
 }
 
-function handleShotImage(event, index) {
-    const file = event.target.files[0];
-    if (file) {
+function handleShotImages(event, index) {
+    const files = Array.from(event.target.files);
+    if (files.length === 0) return;
+
+    shots[index].imgUrls = [];
+    let loadedCount = 0;
+
+    files.forEach(file => {
         const reader = new FileReader();
         reader.onload = function(e) {
-            shots[index].imgUrl = e.target.result;
-            renderShots();
+            shots[index].imgUrls.push(e.target.result);
+            loadedCount++;
+            
+            if (loadedCount === files.length) {
+                renderShots();
+            }
         };
         reader.readAsDataURL(file);
-    }
+    });
 }
 
 function generateShotlist() {
@@ -116,6 +130,11 @@ function generateShotlist() {
 
     let cardsHtml = '';
     shots.forEach(shot => {
+        let pdfImagesHtml = '<span style="color:#999;">No Visual Reference</span>';
+        if (shot.imgUrls && shot.imgUrls.length > 0) {
+            pdfImagesHtml = shot.imgUrls.map(url => `<img src="${url}">`).join('');
+        }
+
         cardsHtml += `
             <div class="sb-card">
                 <div class="sb-header-bar">
@@ -123,7 +142,7 @@ function generateShotlist() {
                     <span>Framing: ${shot.framing || '-'}</span>
                 </div>
                 <div class="sb-img-container">
-                    ${shot.imgUrl ? `<img src="${shot.imgUrl}">` : '<span style="color:#999;">No Visual Reference</span>'}
+                    ${pdfImagesHtml}
                 </div>
                 <div class="sb-details">
                     <div class="sb-details-row">
