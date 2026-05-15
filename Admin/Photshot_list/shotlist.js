@@ -79,8 +79,15 @@ function addShot() {
     shots.push({ shotNo: `${shots.length + 1}`, description: '', framing: '', talent: '', equipment: '', props: '', notes: '', imgUrl: '' }); 
     renderShots(); 
 }
-function removeShot(index) { shots.splice(index, 1); renderShots(); }
-function updateShot(index, key, val) { shots[index][key] = val; }
+
+function removeShot(index) { 
+    shots.splice(index, 1); 
+    renderShots(); 
+}
+
+function updateShot(index, key, val) { 
+    shots[index][key] = val; 
+}
 
 function handleShotImage(event, index) {
     const file = event.target.files[0];
@@ -146,17 +153,22 @@ function generateShotlist() {
 
     preview.innerHTML = `
         <div class="pdf-render">
-            <div class="pdf-header">
-                <div>
+            <div class="pdf-header" style="align-items: flex-start;">
+                <div class="pdf-header-left">
                     <h1>PHOTOSHOOT LIST</h1>
                     <p style="font-size: 16px; font-weight: 700;">${project} ${client !== '-' ? `| ${client}` : ''}</p>
                     <p style="font-size: 12px; margin-top: 5px;">Photographer: <strong>${photographer}</strong></p>
                 </div>
-                <div class="pdf-meta">
-                    <p>Location: <strong>${location}</strong></p>
-                    <p>Date: <strong>${dateStr}</strong></p>
-                    <p>Time: <strong>${time} - ${wrap} (Est. Wrap)</strong></p>
-                    <p>Cam / Roll: <strong>${roll}</strong></p>
+                
+                <div class="pdf-header-right" style="text-align: right;">
+                    <img src="logo-text-biru.png" alt="Zekalian Logo" style="height: 35px; margin-bottom: 12px; object-fit: contain;">
+                    
+                    <div class="pdf-meta" style="text-align: right;">
+                        <p>Location: <strong>${location}</strong></p>
+                        <p>Date: <strong>${dateStr}</strong></p>
+                        <p>Time: <strong>${time} - ${wrap} (Est. Wrap)</strong></p>
+                        <p>Cam / Roll: <strong>${roll}</strong></p>
+                    </div>
                 </div>
             </div>
 
@@ -168,5 +180,5 @@ function generateShotlist() {
 
     setTimeout(() => {
         window.print();
-    }, 300);
+    }, 500);
 }
