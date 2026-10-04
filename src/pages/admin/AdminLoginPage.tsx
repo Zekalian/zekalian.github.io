@@ -83,7 +83,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({ onNavigate }) =>
         {/* Official Agency Brand Header with Logo */}
         <div className="text-center mb-8 flex flex-col items-center">
           <div className="mb-4">
-            <ZekalianLogo size="lg" />
+            <ZekalianLogo variant="center" size="lg" />
           </div>
           <h1 className="text-xl font-extrabold text-slate-900 tracking-tight">
             Portal Masuk Admin

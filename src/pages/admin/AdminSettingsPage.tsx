@@ -13,9 +13,9 @@ export const AdminSettingsPage: React.FC = () => {
     studio_address: settings.studio_address,
     instagram_url: settings.instagram_url,
     linkedin_url: settings.linkedin_url,
-    logo_light_url: settings.logo_light_url || '',
-    logo_dark_url: settings.logo_dark_url || '',
-    favicon_url: settings.favicon_url || '',
+    logo_light_url: settings.logo_light_url || '/assets/Logo Utama Rata Kiri.png',
+    logo_dark_url: settings.logo_dark_url || '/assets/logo-text-putih.png',
+    favicon_url: settings.favicon_url || '/assets/Favicon.png',
   });
 
   const isSuperAdmin = currentUser?.role === 'super_admin';

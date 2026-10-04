@@ -294,7 +294,7 @@ export const AdminInvoicesPage: React.FC = () => {
               <h1>INVOICE</h1>
             </div>
             <div class="pdf-meta-side">
-              <img src="${settings.logo_light_url || '/logo-text-biru.png'}" alt="Logo" style="width: 200px; height: auto; margin-bottom: 15px;" />
+              <img src="${settings.logo_light_url || '/assets/logo-text-biru.png'}" alt="Logo" style="width: 200px; height: auto; margin-bottom: 15px;" />
               <p>Date: <b>${formatDateStr(inv.issueDate)}</b></p>
               <p>No: <b>${inv.invoiceNumber}</b></p>
             </div>
@@ -767,7 +767,7 @@ export const AdminInvoicesPage: React.FC = () => {
                       <h1>INVOICE</h1>
                     </div>
                     <div className="pdf-meta-side">
-                      <img src={settings.logo_light_url || '/logo-text-biru.png'} alt="Logo" style={{ width: '200px', height: 'auto', marginBottom: '15px' }} />
+                      <img src={settings.logo_light_url || '/assets/logo-text-biru.png'} alt="Logo" style={{ width: '200px', height: 'auto', marginBottom: '15px' }} />
                       <p>Date: <b>{formatDateStr(activeInv.issueDate)}</b></p>
                       <p>No: <b>{activeInv.invoiceNumber}</b></p>
                     </div>

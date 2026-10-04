@@ -22,9 +22,9 @@ export const INITIAL_AGENCY_SETTINGS: AgencySettings = {
   studio_address: 'Pekanbaru — Payakumbuh, Indonesia',
   instagram_url: 'https://instagram.com/zekalian',
   linkedin_url: 'https://linkedin.com/company/zekalian',
-  logo_light_url: '',
-  logo_dark_url: '',
-  favicon_url: '',
+  logo_light_url: '/assets/Logo Utama Rata Kiri.png',
+  logo_dark_url: '/assets/logo-text-putih.png',
+  favicon_url: '/assets/Favicon.png',
   updated_at: '2026-09-19T00:00:00Z',
 
   seo_site_title: 'Zekalian — Authentic Branding & Media Creative Production',

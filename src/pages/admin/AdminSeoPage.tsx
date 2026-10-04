@@ -443,7 +443,7 @@ export const AdminSeoPage: React.FC = () => {
   "@type": "${form.seo_schema_type}",
   "name": "${settings.agency_name} Creative Agency",
   "url": "${window.location.origin}",
-  "logo": "${settings.logo_light_url || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80'}",
+  "logo": "${settings.logo_light_url || '/assets/Logo Utama Rata Kiri.png'}",
   "image": "${form.seo_og_image_url}",
   "description": "${form.seo_meta_description}",
   "telephone": "${settings.admin_whatsapp_number}",

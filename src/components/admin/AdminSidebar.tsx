@@ -230,10 +230,10 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
             ) : (
               <button
                 onClick={() => handleNavClick('/')}
-                className="mx-auto text-center font-black text-[#005DDD] text-lg cursor-pointer"
+                className="mx-auto flex items-center justify-center p-1 cursor-pointer"
                 title="Zekalian Agency"
               >
-                Z
+                <ZekalianLogo variant="icon" size="sm" />
               </button>
             )}
 
