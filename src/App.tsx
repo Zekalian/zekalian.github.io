@@ -45,6 +45,7 @@ const AdminBugReportsPage = lazy(() => import('./pages/admin/AdminBugReportsPage
 const AdminStoryboardPage = lazy(() => import('./pages/admin/AdminStoryboardPage').then(m => ({ default: m.AdminStoryboardPage })));
 const AdminAnalyticsPage = lazy(() => import('./pages/admin/AdminAnalyticsPage').then(m => ({ default: m.AdminAnalyticsPage })));
 const AdminAiChatPage = lazy(() => import('./pages/admin/AdminAiChatPage').then(m => ({ default: m.AdminAiChatPage })));
+const AdminImgbbGuidePage = lazy(() => import('./pages/admin/AdminImgbbGuidePage').then(m => ({ default: m.AdminImgbbGuidePage })));
 import { AdminFloatingChatWidget } from './components/admin/AdminFloatingChatWidget';
 import { usePageSEO } from './hooks/usePageSEO';
 import { createPageViewPayload } from './utils/analytics';
@@ -152,6 +153,9 @@ const AppContent: React.FC = () => {
   } else if (currentRoute === '/privacy' || currentRoute === '/privacy-policy') {
     pageTitle = 'Kebijakan Privasi | Zekalian Agency';
     pageDesc = 'Kebijakan privasi dan ketentuan perlindungan data resmi Zekalian Agency.';
+  } else if (currentRoute === '/admin/guide/imgbb' || currentRoute === '/guide/imgbb') {
+    pageTitle = 'Panduan Upload Foto ImgBB & Direct Link | Zekalian';
+    pageDesc = 'Petunjuk resmi mengunggah foto resolusi tinggi ke ImgBB dan mengambil Direct Link untuk disematkan ke website Zekalian.';
   } else if (currentRoute.startsWith('/admin')) {
     pageTitle = 'Portal Admin Zekalian';
     pageDesc = 'Zekalian Agency Workspace';
@@ -223,6 +227,19 @@ const AppContent: React.FC = () => {
     }
     if (currentRoute === '/privacy' || currentRoute === '/privacy-policy') {
       return <PrivacyPolicyPage onNavigate={navigate} />;
+    }
+    if (currentRoute === '/guide/imgbb' || currentRoute === '/guide-imgbb') {
+      return (
+        <div className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <Suspense fallback={
+            <div className="flex items-center justify-center py-20">
+              <div className="w-8 h-8 border-4 border-[#005DDD] border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          }>
+            <AdminImgbbGuidePage onNavigate={navigate} />
+          </Suspense>
+        </div>
+      );
     }
 
     // Default 404 fallback to Home
@@ -330,6 +347,10 @@ const AppContent: React.FC = () => {
         break;
       case '/admin/bug-reports':
         adminComponent = <AdminBugReportsPage />;
+        break;
+      case '/admin/guide/imgbb':
+      case '/admin/imgbb-guide':
+        adminComponent = <AdminImgbbGuidePage onNavigate={navigate} />;
         break;
       default:
         adminComponent = <AdminDashboardPage onNavigate={navigate} />;

@@ -29,6 +29,7 @@ import {
   Flag,
   TrendingUp,
   Bot,
+  HelpCircle,
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -39,6 +40,7 @@ interface AdminSidebarProps {
 }
 
 export const canAccessRoute = (role: UserRole, route: string): boolean => {
+  if (route.startsWith('/admin/guide')) return true;
   if (
     route === '/admin/ai-assistant' ||
     route === '/admin/bug-reports' ||
@@ -189,6 +191,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
     {
       title: 'System & Support',
       items: [
+        { label: 'Panduan Upload ImgBB', route: '/admin/guide/imgbb', icon: HelpCircle },
         { label: 'Pelaporan Bug & Isu', route: '/admin/bug-reports', icon: Bug },
       ],
       isSystemSupport: true,

@@ -23,7 +23,9 @@ import {
   Globe,
   UserCheck,
   Sparkles,
+  HelpCircle,
 } from 'lucide-react';
+import { ImgbbGuideModal } from '../../components/admin/ImgbbGuideModal';
 
 interface AdminProjectsPageProps {
   onNavigate?: (route: string) => void;
@@ -33,6 +35,7 @@ export const AdminProjectsPage: React.FC<AdminProjectsPageProps> = ({ onNavigate
   const { projects, categories, teamMembers, adminUsers, saveProject, deleteProject, currentUser } = useApp();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [isImgbbGuideOpen, setIsImgbbGuideOpen] = useState(false);
 
   // Form State
   const [title, setTitle] = useState('');
@@ -203,6 +206,14 @@ export const AdminProjectsPage: React.FC<AdminProjectsPageProps> = ({ onNavigate
       alert('Mohon masukkan tautan URL gambar yang valid (dimulai dengan https:// atau http://).');
       return;
     }
+
+    if (trimmed.includes('ibb.co/') && !trimmed.includes('i.ibb.co/')) {
+      if (confirm('Peringatan: Tautan yang Anda masukkan terdeteksi sebagai Viewer Link ImgBB (ibb.co/...). Foto TIDAK AKAN MUNCUL di website dengan tautan ini.\n\nWebsite membutuhkan Direct Link (i.ibb.co/...). Klik OK untuk membuka petunjuk cara mengambil Direct Link, atau Batal untuk tetap memasukkan tautan ini.')) {
+        setIsImgbbGuideOpen(true);
+        return;
+      }
+    }
+
     setMediaList([...mediaList, { image_url: trimmed, caption: newImageCaption.trim() }]);
     setNewImageUrl('');
     setNewImageCaption('');
@@ -724,19 +735,38 @@ export const AdminProjectsPage: React.FC<AdminProjectsPageProps> = ({ onNavigate
               </div>
 
               {/* Manual URL Input Alternative */}
-              <div className="pt-1">
-                <p className="text-[11px] font-semibold text-slate-500 mb-1 flex items-center gap-1">
-                  <LinkIcon className="w-3 h-3 text-slate-400" />
-                  <span>Atau masukkan URL foto eksternal secara manual:</span>
-                </p>
+              <div className="pt-2 border-t border-slate-200/60 mt-2 space-y-2">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                  <p className="text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
+                    <LinkIcon className="w-3.5 h-3.5 text-[#005DDD]" />
+                    <span>Atau masukkan URL foto eksternal (ImgBB / Cloud Hosting):</span>
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setIsImgbbGuideOpen(true)}
+                    className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#005DDD] hover:text-[#004bb5] bg-sky-50 hover:bg-sky-100 border border-sky-200/80 px-2.5 py-1 rounded-lg transition-colors cursor-pointer w-fit"
+                    title="Petunjuk cara upload foto & dapatkan direct link di imgbb.com"
+                  >
+                    <HelpCircle className="w-3.5 h-3.5 text-[#005DDD]" />
+                    <span>Petunjuk Upload Foto ImgBB &amp; Direct Link</span>
+                    <ExternalLink className="w-3 h-3 opacity-60" />
+                  </button>
+                </div>
+
                 <div className="flex flex-col sm:flex-row gap-2">
-                  <input
-                    type="text"
-                    placeholder="URL Foto (https://...)"
-                    value={newImageUrl}
-                    onChange={(e) => setNewImageUrl(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:outline-none focus:border-[#005DDD]"
-                  />
+                  <div className="flex-1">
+                    <input
+                      type="text"
+                      placeholder="Tempel Direct Link (contoh: https://i.ibb.co/XyZ123/foto.jpg)..."
+                      value={newImageUrl}
+                      onChange={(e) => setNewImageUrl(e.target.value)}
+                      className={`w-full px-3 py-2 rounded-xl bg-white border text-xs focus:outline-none transition-colors ${
+                        newImageUrl.includes('ibb.co/') && !newImageUrl.includes('i.ibb.co/')
+                          ? 'border-amber-400 focus:border-amber-500 bg-amber-50/30'
+                          : 'border-slate-200 focus:border-[#005DDD]'
+                      }`}
+                    />
+                  </div>
                   <input
                     type="text"
                     placeholder="Caption foto (opsional)"
@@ -747,11 +777,29 @@ export const AdminProjectsPage: React.FC<AdminProjectsPageProps> = ({ onNavigate
                   <button
                     type="button"
                     onClick={handleAddMediaImage}
-                    className="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold shrink-0 hover:bg-slate-800 transition-all cursor-pointer"
+                    className="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold shrink-0 hover:bg-slate-800 transition-all cursor-pointer flex items-center justify-center gap-1"
                   >
-                    + Tambah URL
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>+ Tambah URL</span>
                   </button>
                 </div>
+
+                {/* Instant Alert if user pastes ibb.co viewer link */}
+                {newImageUrl.includes('ibb.co/') && !newImageUrl.includes('i.ibb.co/') && (
+                  <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-[11px] text-amber-900 flex items-start gap-2 animate-in fade-in">
+                    <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                    <div className="flex-1 leading-relaxed">
+                      <strong>Tautan terdeteksi sebagai Viewer Link (ibb.co/...).</strong> Foto tidak akan muncul di website dengan link ini. Anda harus menggunakan <strong>Direct Link (i.ibb.co/...)</strong>.{' '}
+                      <button
+                        type="button"
+                        onClick={() => setIsImgbbGuideOpen(true)}
+                        className="text-[#005DDD] font-bold underline cursor-pointer inline-flex items-center gap-0.5 ml-1"
+                      >
+                        Buka Petunjuk Direct Link &rarr;
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Uploaded Photos Grid with Caption Editing */}
@@ -1119,6 +1167,12 @@ export const AdminProjectsPage: React.FC<AdminProjectsPageProps> = ({ onNavigate
           </div>
         </div>
       )}
+      {/* ImgBB Upload & Direct Link Guide Modal */}
+      <ImgbbGuideModal
+        isOpen={isImgbbGuideOpen}
+        onClose={() => setIsImgbbGuideOpen(false)}
+        onOpenFullPage={() => onNavigate?.('/admin/guide/imgbb')}
+      />
     </div>
   );
 };

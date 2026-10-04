@@ -310,21 +310,31 @@ export const AdminArticlesPage: React.FC = () => {
 
                 {/* Option 2: Direct URL Input */}
                 <div className="border border-slate-200 rounded-2xl p-3.5 bg-white flex flex-col justify-center">
-                  <label className="text-[11px] font-bold text-slate-600 mb-1 flex items-center gap-1">
-                    <LinkIcon className="w-3 h-3 text-[#005DDD]" />
-                    <span>Atau Masukkan Tautan / Link Gambar (URL):</span>
-                  </label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-[11px] font-bold text-slate-600 flex items-center gap-1">
+                      <LinkIcon className="w-3 h-3 text-[#005DDD]" />
+                      <span>Atau Masukkan Tautan / Link Gambar (URL):</span>
+                    </label>
+                    <a
+                      href="#/admin/guide/imgbb"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[10px] font-bold text-[#005DDD] hover:underline"
+                    >
+                      Petunjuk Direct Link ImgBB &rarr;
+                    </a>
+                  </div>
                   <div className="flex gap-2">
                     <input
                       type="text"
-                      placeholder="https://images.unsplash.com/... atau URL gambar"
+                      placeholder="https://images.unsplash.com/... atau https://i.ibb.co/..."
                       value={coverImageUrl}
                       onChange={(e) => setCoverImageUrl(e.target.value)}
                       className="flex-1 px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-mono focus:outline-none focus:border-[#005DDD] focus:bg-white"
                     />
                   </div>
                   <p className="text-[10px] text-slate-400 mt-1">
-                    Mendukung tautan gambar eksternal (Unsplash, CDN, atau server web).
+                    Mendukung tautan gambar eksternal (ImgBB Direct Link, Unsplash, CDN, atau server web).
                   </p>
                 </div>
               </div>
