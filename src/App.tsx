@@ -15,6 +15,7 @@ import { TeamPage } from './pages/public/TeamPage';
 import { ArticlesPage } from './pages/public/ArticlesPage';
 import { ArticleDetailPage } from './pages/public/ArticleDetailPage';
 import { ContactPage } from './pages/public/ContactPage';
+import { PrivacyPolicyPage } from './pages/public/PrivacyPolicyPage';
 
 // Admin Components & Lazy-Loaded Pages
 import { AdminSidebar, canAccessRoute } from './components/admin/AdminSidebar';
@@ -148,6 +149,9 @@ const AppContent: React.FC = () => {
   } else if (currentRoute === '/contact') {
     pageTitle = 'Hubungi & Mulai Kolaborasi Proyek';
     pageDesc = 'Konsultasikan ide kampanye, jadwal syuting, atau tanyakan estimasi anggaran proyek bersama tim Zekalian.';
+  } else if (currentRoute === '/privacy' || currentRoute === '/privacy-policy') {
+    pageTitle = 'Kebijakan Privasi | Zekalian Agency';
+    pageDesc = 'Kebijakan privasi dan ketentuan perlindungan data resmi Zekalian Agency.';
   } else if (currentRoute.startsWith('/admin')) {
     pageTitle = 'Portal Admin Zekalian';
     pageDesc = 'Zekalian Agency Workspace';
@@ -216,6 +220,9 @@ const AppContent: React.FC = () => {
     }
     if (currentRoute === '/contact') {
       return <ContactPage />;
+    }
+    if (currentRoute === '/privacy' || currentRoute === '/privacy-policy') {
+      return <PrivacyPolicyPage onNavigate={navigate} />;
     }
 
     // Default 404 fallback to Home
