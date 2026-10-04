@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Panduan Penggunaan Panel Admin & Operasional Zekalian Studio</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+
+    @page {
+      size: A4;
+      margin: 14mm 14mm 14mm 14mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: #1e293b;
+      line-height: 1.5;
+      background-color: #ffffff;
+      margin: 0;
+      padding: 24px;
+      font-size: 12.5px;
+    }
+
+    .no-print-bar {
+      background: #005DDD;
+      color: #ffffff;
+      padding: 14px 24px;
+      border-radius: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      box-shadow: 0 6px 18px rgba(0,93,221,0.25);
+    }
+
+    .btn-print {
+      background: #ffffff;
+      color: #005DDD;
+      border: none;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 10px 22px;
+      border-radius: 9999px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      transition: all 0.2s;
+    }
+
+    .btn-print:hover {
+      background: #f8fafc;
+      transform: translateY(-1px);
+    }
+
+    @media print {
+      body {
+        padding: 0;
+      }
+      .no-print-bar {
+        display: none !important;
+      }
+      .page-break {
+        page-break-before: always;
+      }
+    }
+
+    /* Cover / Header Section */
+    .header-card {
+      border: 1.5px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 22px 26px;
+      background: linear-gradient(135deg, #0b132b 0%, #1c2541 55%, #005DDD 100%);
+      color: #ffffff;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .badge-top {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .header-card h1 {
+      margin: 0 0 6px 0;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .header-card p {
+      margin: 0;
+      color: #cbd5e1;
+      font-size: 12.5px;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid #005DDD;
+      padding-bottom: 5px;
+      margin-top: 20px;
+      margin-bottom: 12px;
+    }
+
+    .section-number {
+      background: #005DDD;
+      color: #ffffff;
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .card {
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      background: #f8fafc;
+      margin-bottom: 10px;
+    }
+
+    .card-title {
+      font-weight: 700;
+      color: #005DDD;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px;
+      margin-bottom: 12px;
+      font-size: 11.5px;
+    }
+
+    .table th {
+      background: #f1f5f9;
+      color: #1e293b;
+      text-align: left;
+      padding: 7px 10px;
+      font-weight: 700;
+      border: 1px solid #cbd5e1;
+    }
+
+    .table td {
+      padding: 7px 10px;
+      border: 1px solid #e2e8f0;
+      vertical-align: top;
+    }
+
+    .highlight-box {
+      background: #eff6ff;
+      border-left: 4px solid #005DDD;
+      padding: 10px 14px;
+      border-radius: 0 8px 8px 0;
+      margin: 10px 0;
+      font-size: 11.5px;
+    }
+
+    .kbd {
+      font-family: 'JetBrains Mono', monospace;
+      background: #e2e8f0;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .role-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .role-super { background: #fee2e2; color: #991b1b; }
+    .role-admin { background: #e0f2fe; color: #0369a1; }
+    .role-programmer { background: #e0e7ff; color: #3730a3; }
+    .role-producer { background: #f3e8ff; color: #6b21a8; }
+    .role-finance { background: #dcfce7; color: #166534; }
+    .role-marketing { background: #fce7f3; color: #9d174d; }
+    .role-editor { background: #ccfbf1; color: #115e59; }
+    .role-analyst { background: #fef3c7; color: #92400e; }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    .service-box {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+
+    .service-box-title {
+      font-weight: 800;
+      font-size: 12px;
+      color: #005DDD;
+      margin-bottom: 3px;
+    }
+
+    .footer-doc {
+      margin-top: 24px;
+      padding-top: 10px;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      color: #64748b;
+      font-size: 10.5px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- In-Browser Print Action Bar -->
+  <div class="no-print-bar">
+    <div>
+      <strong style="font-size: 15px;">Manual Operasional Panel Admin &amp; Alur Tim Zekalian</strong>
+      <span style="opacity: 0.85; margin-left: 8px; font-size: 12px;">(Lengkap: 8 Peran RBAC &amp; Seluruh Ragam Portofolio Studio)</span>
+    </div>
+    <button class="btn-print" onclick="window.print()">
+      Simpan / Cetak PDF
+    </button>
+  </div>
+
+  <!-- Document Header / Cover -->
+  <div class="header-card">
+    <div class="badge-top">Internal Standard Operating Procedure (SOP)</div>
+    <h1>Panduan Penggunaan Panel Admin &amp; Operasional Studio</h1>
+    <p>Manual Kerja Resmi Tim Zekalian — Authentic Branding, Production House, Commercial Photography &amp; Digital Media</p>
+    <div style="margin-top: 12px; font-size: 11px; color: #94a3b8; display: flex; flex-wrap: wrap; gap: 16px;">
+      <span>Studio: <strong>Zekalian Creative Production</strong></span>
+      <span>Cakupan: <strong>8 Peran Kerja (RBAC)</strong></span>
+      <span>Status: <strong>Dokumen Resmi Internal</strong></span>
+    </div>
+  </div>
+
+  <!-- 1. Akses & Autentikasi -->
+  <div class="section-title">
+    <span class="section-number">1</span>
+    Akses Masuk (Login) &amp; Autentikasi
+  </div>
+
+  <div class="card">
+    <div class="card-title">1.1 Cara Membuka Portal Masuk</div>
+    <p style="margin: 0 0 6px 0;">Buka peramban di komputer/tablet, lalu akses rute <strong>/admin/login</strong> di website studio.</p>
+    
+    <div class="highlight-box">
+      <strong>Kredensial Super Admin Studio:</strong><br>
+      • <strong>ID / Username:</strong> <span class="kbd">zekalian</span> (atau email: <span class="kbd">admin@zekalian.web.id</span>)<br>
+      • <strong>Kata Sandi (Password):</strong> <span class="kbd">Sleep0veerr</span>
+    </div>
+
+    <p style="margin: 0; font-size: 11.5px; color: #475569;">
+      <strong>Masuk dengan Akun Google (Kru Lapangan / Anggota Tim):</strong> Anggota kru dapat memilih <em>"Masuk dengan Akun Google"</em>. Sistem keamanan agensi akan menahan status akun sebagai <span class="kbd">PENDING</span> sampai disetujui (Approved) dan ditetapkan perannya oleh Super Admin di menu <em>Kelola User &amp; Role</em>.
+    </p>
+  </div>
+
+  <!-- 2. Pembagian 8 Peran Pengguna (Lengkap Sesuai Role Switcher) -->
+  <div class="section-title">
+    <span class="section-number">2</span>
+    Struktur Lengkap 8 Peran Pengguna (RBAC Matrix)
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th style="width: 17%;">Peran (Role)</th>
+        <th style="width: 25%;">Divisi &amp; Fokus</th>
+        <th style="width: 38%;">Menu &amp; Hak Akses Utama</th>
+        <th style="width: 20%;">Batasan Wewenang</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="role-badge role-super">Super Admin</span></td>
+        <td>Executive &amp; Founders (Zaki Fadhillah)</td>
+        <td>Akses tak terbatas: Kelola User &amp; Role, Pengaturan Sistem &amp; SEO, Keuangan, Seluruh Modul Produksi &amp; Konten.</td>
+        <td>Tidak ada batasan.</td>
+      </tr>
+      <tr>
+        <td><span class="role-badge role-admin">Admin</span></td>
+        <td>Studio Manager &amp; Operasional</td>
+        <td>Portofolio, Artikel, Logo Klien, Testimoni, Milestones, Jadwal Kalender, Shot List, Kotak Masuk Prospek.</td>
+        <td>Tidak dapat mengubah Hak Akses RBAC &amp; Pengaturan Inti Agensi.</td>
+      </tr>
+      <tr>
+        <td><span class="role-badge role-programmer">Programmer</span></td>
+        <td>Tech &amp; Web Infrastructure</td>
+        <td>Akses penuh sistem, Pelaporan Bug &amp; Isu, Optimasi Database &amp; SEO, Integrasi Form WhatsApp.</td>
+        <td>Fokus pada keandalan sistem &amp; perbaikan bug.</td>
+      </tr>
+      <tr>
+        <td><span class="role-badge role-producer">Producer</span></td>
+        <td>Line Producer &amp; Head of Production</td>
+        <td>Milestones Proyek, Project Brief, Production Shot List, Storyboard, Jadwal Syuting, Komunikasi Klien.</td>
+        <td>Tidak mengakses pembukuan invoice internal/pembagian gaji.</td>
+      </tr>
+      <tr>
+        <td><span class="role-badge role-finance">Finance</span></td>
+        <td>Keuangan &amp; Administrasi</td>
+        <td>Generator Invoice, Generator Proposal Anggaran, Kotak Masuk Prospek (Inquiries), Profil.</td>
+        <td>Tidak mengedit portofolio karya atau konfigurasi teknis.</td>
+      </tr>
+      <tr>
+        <td><span class="role-badge role-marketing">Marketing</span></td>
+        <td>Promosi &amp; Pertumbuhan Brand</td>
+        <td>Artikel &amp; Wawasan, Logo Klien Showcase, Testimoni Klien, Analitik WhatsApp &amp; Inquiries, Pengaturan SEO.</td>
+        <td>Tidak mengakses dokumen shot list produksi &amp; invoice keuangan.</td>
+      </tr>
+      <tr>
+        <td><span class="role-badge role-editor">Editor / Creative</span></td>
+        <td>Post-Production, Designer, Video Editor</td>
+        <td>Unggah Portofolio (Video &amp; Kolase Foto), Tulis Artikel Wawasan, Buat Moodboard &amp; Storyboard Adegan.</td>
+        <td>Hanya mengelola materi kreatif &amp; visual.</td>
+      </tr>
+      <tr>
+        <td><span class="role-badge role-analyst">Analyst</span></td>
+        <td>Data &amp; Media Analyst</td>
+        <td>Ringkasan Dashboard, Pelacakan Tombol WhatsApp (A/B Test Variant), Statistik Prospek Masuk.</td>
+        <td>Mode Lihat Saja (Read-Only), tidak bisa menghapus konten.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Page Break for Clean Printing -->
+  <div class="page-break"></div>
+
+  <!-- 3. Portofolio Multi-Format Studio -->
+  <div class="section-title">
+    <span class="section-number">3</span>
+    Manajemen Portofolio Multi-Format (Bukan Hanya Video)
+  </div>
+
+  <p style="margin: 0 0 10px 0;">
+    Studio Zekalian melayani ragam kebutuhan visual kreatif yang menyeluruh. Panel admin portofolio (<strong>/admin/projects</strong>) dirancang fleksibel untuk mendukung seluruh format karya:
+  </p>
+
+  <div class="service-grid">
+    <div class="service-box">
+      <div class="service-box-title">1. Brand Logo Design &amp; Visual Identity</div>
+      <p style="margin:0; font-size:11px; color:#475569;">
+        <strong>Format di Admin:</strong> Pilih <em>"Kolase Foto Resolusi Tinggi"</em>.<br>
+        Unggah gambar panduan brand DNA, logo system (primary &amp; secondary), grid geometri logo, eksplorasi tipografi, color palette, serta mockup stationery &amp; merchandise.
+      </p>
+    </div>
+
+    <div class="service-box">
+      <div class="service-box-title">2. Commercial &amp; Editorial Photography</div>
+      <p style="margin:0; font-size:11px; color:#475569;">
+        <strong>Format di Admin:</strong> Pilih <em>"Kolase Foto Resolusi Tinggi"</em>.<br>
+        • <strong>Upload Langsung Drag &amp; Drop:</strong> Kru dapat langsung melakukan <em>drag &amp; drop</em> file gambar dari komputer (bisa banyak file sekaligus). Foto otomatis diunggah dan disimpan di <strong>Firebase Storage</strong> dengan URL publik resmi.<br>
+        • Opsional: Tetap mendukung input URL foto eksternal secara manual jika diperlukan.<br>
+        • Foto dilengkapi fitur <em>Image Lightbox</em> di halaman publik untuk melihat detail ketajaman resolusi tinggi.
+      </p>
+    </div>
+
+    <div class="service-box">
+      <div class="service-box-title">3. Production House &amp; Commercial Video (16:9 &amp; 9:16)</div>
+      <p style="margin:0; font-size:11px; color:#475569;">
+        <strong>Format di Admin:</strong> Pilih <em>"Video YouTube / Shorts"</em>.<br>
+        • <strong>Landscape Bioskop (16:9):</strong> Untuk iklan TVC, company profile, dan dokumenter korporat.<br>
+        • <strong>Vertical Video (9:16):</strong> Khusus konten vertikal (Instagram Reels, YouTube Shorts, &amp; TikTok). Ditampilkan dalam frame smartphone vertikal yang elegan di website tanpa terpotong (letterbox).<br>
+        Mendukung URL <code>youtube.com/watch</code>, <code>youtu.be</code>, maupun tautan langsung <code>youtube.com/shorts/...</code>. Kolase foto di bawahnya berfungsi sebagai galeri <em>Production Stills &amp; BTS</em>.
+      </p>
+    </div>
+
+    <div class="service-box">
+      <div class="service-box-title">4. Social Media Management &amp; Digital Campaign</div>
+      <p style="margin:0; font-size:11px; color:#475569;">
+        <strong>Format di Admin:</strong> Gabungan Kolase Visual &amp; Deskripsi Metrik.<br>
+        Tampilkan grid feed Instagram, visual banner kampanye, motion graphics promo, serta cantumkan pencapaian engagement rate dan pertumbuhan audiens di deskripsi studi kasus.
+      </p>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <strong>Fitur Kredit Kru (Team Credits) di Portofolio:</strong><br>
+    Setiap proyek dapat ditautkan dengan nama kru yang bertugas (Creative Director, Lead Brand Designer, Director of Photography, Editor, atau Stylist). Nama kru yang terpasang akan otomatis memunculkan pop-up profil dan tautan portofolio personal mereka di halaman publik.
+  </div>
+
+  <!-- 4. Modul Dokumen & Manajemen Produksi -->
+  <div class="section-title">
+    <span class="section-number">4</span>
+    Alur Kerja Operasional &amp; Produksi Studio
+  </div>
+
+  <div class="card">
+    <div class="card-title">4.1 Milestones Proyek &amp; Laporan Klien (/admin/milestones)</div>
+    <ul style="margin: 0; padding-left: 18px; font-size: 11.5px;">
+      <li><strong>5 Fase Produksi Resmi:</strong> <em>1. Briefing &amp; Kickoff</em> &rarr; <em>2. Konsep &amp; Storyboard</em> &rarr; <em>3. Produksi di Lapangan</em> &rarr; <em>4. Review Draf &amp; Revisi</em> &rarr; <em>5. Delivery &amp; Serah Terima</em>.</li>
+      <li><strong>Checklist Tugas:</strong> Mencentang butir tugas otomatis menghitung persentase bar penyelesaian proyek (0% - 100%).</li>
+      <li><strong>Kirim Laporan WhatsApp Instan:</strong> Klik <em>"Salin Laporan WA"</em> untuk mendapatkan teks laporan terstruktur siap kirim ke grup WhatsApp klien.</li>
+      <li><strong>Lembar Status Klien:</strong> Tombol <em>"Lihat Dokumen Klien"</em> menyediakan tampilan formal dengan kop resmi Zekalian yang siap dicetak ke PDF untuk klien korporat.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">4.2 Moodboard &amp; Storyboard (/admin/storyboard)</div>
+    <ul style="margin: 0; padding-left: 18px; font-size: 11.5px;">
+      <li><strong>Moodboard Studio:</strong> Wadah kurasi referensi visual untuk klien (Palet Warna, Arah Lighting, Mood Wardrobe, dan Gaya Tipografi).</li>
+      <li><strong>Storyboard Adegan:</strong> Penyusunan rincian adegan demi adegan (Scene 01, Scene 02, dst.) lengkap dengan ukuran bidikan (Wide, Medium, Close-up), pergerakan kamera (Static, Pan, Drone), audio &amp; dialog, serta durasi detik.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">4.3 Production Shot List Lapangan (/admin/shotlists)</div>
+    <ul style="margin: 0; padding-left: 18px; font-size: 11.5px;">
+      <li>Lembar kerja teknis untuk Director of Photography (DoP) dan Kru Kamera di lokasi syuting.</li>
+      <li>Mencakup: Pilihan Lensa (24mm, 35mm, 50mm, 85mm), Frame Rate (24fps normal, 60fps/120fps slow-motion), catatan framing, dan tombol centang <em>"Taken"</em> saat shot berhasil direkam.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">4.4 Kalender Jadwal Produksi (/admin/schedule)</div>
+    <p style="margin: 0; font-size: 11.5px;">
+      Penjadwalan terpadu untuk mencegah bentrok tanggal: <em>Pre-production Meeting</em>, <em>Technical Recce</em>, <em>Shooting Day</em>, <em>Voice Over Recording</em>, hingga <em>Client Offline Review</em>.
+    </p>
+  </div>
+
+  <!-- Page Break for Clean Printing -->
+  <div class="page-break"></div>
+
+  <!-- 5. Modul Keuangan & Legalitas Studio -->
+  <div class="section-title">
+    <span class="section-number">5</span>
+    Modul Keuangan, Proposal, &amp; Penagihan (Finance &amp; Executive)
+  </div>
+
+  <div class="card">
+    <div class="card-title">5.1 Generator Proposal Penawaran (/admin/proposals)</div>
+    <p style="margin: 0 0 6px 0; font-size: 11.5px;">
+      Fitur khusus untuk divisi Finance dan Super Admin guna merancang surat penawaran harga resmi (Quotation) kepada calon klien.
+    </p>
+    <ul style="margin: 0; padding-left: 18px; font-size: 11.5px;">
+      <li>Rincian paket layanan (Branding Package, Video Commercial, Photo Session).</li>
+      <li>Perincian biaya kru, peralatan teknis, sewa lokasi, dan akomodasi.</li>
+      <li>Format siap cetak dengan kop resmi studio Zekalian.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">5.2 Generator Tagihan &amp; Faktur (/admin/invoices)</div>
+    <ul style="margin: 0; padding-left: 18px; font-size: 11.5px;">
+      <li>Pembuatan invoice termin: <strong>Uang Muka (DP 50%)</strong>, <strong>Termin Pasca-Produksi</strong>, dan <strong>Pelunasan (Final 100%)</strong>.</li>
+      <li>Dilengkapi nomor rekening resmi bank agensi, syarat dan ketentuan pembayaran, serta tanda tangan digital authorized signatory.</li>
+    </ul>
+  </div>
+
+  <!-- 6. Kotak Masuk Klien & Tracking Prospek -->
+  <div class="section-title">
+    <span class="section-number">6</span>
+    Kotak Masuk Calon Klien &amp; Pelacakan Prospek (CRM Leads)
+  </div>
+
+  <div class="card">
+    <div class="card-title">6.1 Manajemen Prospek (/admin/inquiries)</div>
+    <p style="margin: 0 0 6px 0; font-size: 11.5px;">
+      Setiap pesan yang dikirim oleh pengunjung melalui formulir kontak atau klik tombol WhatsApp akan masuk ke panel ini.
+    </p>
+    <ul style="margin: 0; padding-left: 18px; font-size: 11.5px;">
+      <li><strong>Kolom Data:</strong> Nama Klien, Nama Perusahaan/Brand, Estimasi Anggaran (Budget), Layanan yang diminati, dan Pesan Proyek.</li>
+      <li><strong>Status Pipeline Prospek:</strong> Tim marketing/sales wajib memperbarui status dari: <span class="kbd">BARU</span> &rarr; <span class="kbd">DIHUBUNGI</span> &rarr; <span class="kbd">MEETING / PITCHING</span> &rarr; <span class="kbd">DEAL / PROJECT RUNNING</span>.</li>
+    </ul>
+  </div>
+
+  <!-- 7. Standar Keamanan & Etika Kerja -->
+  <div class="section-title">
+    <span class="section-number">7</span>
+    Standar Keamanan, Kerahasiaan, &amp; Etika Studio
+  </div>
+
+  <div class="highlight-box" style="background: #fffbeb; border-color: #f59e0b; color: #92400e;">
+    <strong>Kaidah Wajib Operasional Studio:</strong><br>
+    1. <strong>Kerahasiaan Dokumen Klien:</strong> Data proposal, invoice, dan brief klien bersifat rahasia (Confidential). Dilarang menyebarkan dokumen internal ke luar tim.<br>
+    2. <strong>Prinsip Publikasi Karya:</strong> Seluruh portofolio yang diubah statusnya menjadi <em>PUBLISHED</em> akan langsung tampil di halaman depan website. Pastikan seluruh hak cipta klien, logo brand, dan izin rilis video telah disepakati sebelum mempublikasikan.<br>
+    3. <strong>Sesi Login:</strong> Selalu tekan tombol <em>"Keluar (Logout)"</em> bila mengakses panel admin melalui laptop atau komputer bersama saat berada di lokasi syuting.
+  </div>
+
+  <!-- Document Footer -->
+  <div class="footer-doc">
+    <div>&copy; 2026 Zekalian Creative Agency. Seluruh hak cipta dilindungi.</div>
+    <div>Dokumen Standar Operasional Prosedur (SOP) Internal Studio Zekalian</div>
+  </div>
+
+</body>
+</html>

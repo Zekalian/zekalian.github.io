@@ -1,0 +1,234 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Admin user profile and authorization role",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "username": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "full_name": { "type": "string" },
+        "role": { "type": "string", "enum": ["super_admin", "admin", "editor", "analyst", "pending"] },
+        "account_status": { "type": "string", "enum": ["APPROVED", "PENDING_APPROVAL", "REJECTED"] },
+        "request_department": { "type": "string" },
+        "request_reason": { "type": "string" },
+        "requested_role": { "type": "string" },
+        "requested_at": { "type": "string" },
+        "reviewed_by": { "type": "string" },
+        "reviewed_at": { "type": "string" },
+        "avatar_url": { "type": "string" },
+        "whatsapp": { "type": "string" },
+        "linkedin": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["uid", "username", "email", "full_name", "role"]
+    },
+    "Project": {
+      "title": "Project",
+      "description": "Creative agency showcase portfolio project",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "slug": { "type": "string" },
+        "category": { "type": "string" },
+        "client": { "type": "string" },
+        "year": { "type": "string" },
+        "hero_image": { "type": "string" },
+        "description": { "type": "string" },
+        "highlight": { "type": "boolean" },
+        "order": { "type": "number" },
+        "video_url": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["title", "slug", "category", "client", "hero_image"]
+    },
+    "Article": {
+      "title": "Article",
+      "description": "Editorial article or creative insight",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "slug": { "type": "string" },
+        "excerpt": { "type": "string" },
+        "content": { "type": "string" },
+        "category": { "type": "string" },
+        "author": { "type": "string" },
+        "read_time": { "type": "string" },
+        "published_at": { "type": "string" },
+        "cover_image": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["title", "slug", "content", "category", "author"]
+    },
+    "AgencyMember": {
+      "title": "AgencyMember",
+      "description": "Team crew member profile",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "role": { "type": "string" },
+        "avatar_url": { "type": "string" },
+        "bio": { "type": "string" },
+        "instagram": { "type": "string" },
+        "linkedin": { "type": "string" },
+        "whatsapp": { "type": "string" },
+        "order": { "type": "number" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["name", "role", "avatar_url"]
+    },
+    "ClientLogo": {
+      "title": "ClientLogo",
+      "description": "Client logo displayed in showcase",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "logo_url": { "type": "string" },
+        "tier": { "type": "string" },
+        "is_active": { "type": "boolean" },
+        "order": { "type": "number" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["name", "logo_url"]
+    },
+    "Testimonial": {
+      "title": "Testimonial",
+      "description": "Client review and testimonial",
+      "type": "object",
+      "properties": {
+        "client_name": { "type": "string" },
+        "client_role": { "type": "string" },
+        "company": { "type": "string" },
+        "quote": { "type": "string" },
+        "rating": { "type": "number" },
+        "avatar_url": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["client_name", "company", "quote"]
+    },
+    "AgencySettings": {
+      "title": "AgencySettings",
+      "description": "Global agency metadata and contact details",
+      "type": "object",
+      "properties": {
+        "company_name": { "type": "string" },
+        "tagline": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "whatsapp": { "type": "string" },
+        "address": { "type": "string" },
+        "instagram": { "type": "string" },
+        "youtube": { "type": "string" },
+        "linkedin": { "type": "string" },
+        "operational_hours": { "type": "string" }
+      },
+      "required": ["company_name", "email", "phone"]
+    },
+    "Inquiry": {
+      "title": "Inquiry",
+      "description": "Client contact inquiry submitted from public website",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "company": { "type": "string" },
+        "project_type": { "type": "string" },
+        "estimated_budget": { "type": "string" },
+        "message": { "type": "string" },
+        "status": { "type": "string", "enum": ["new", "reviewed", "contacted", "archived"] },
+        "created_at": { "type": "string" }
+      },
+      "required": ["name", "email", "message"]
+    },
+    "WhatsAppClick": {
+      "title": "WhatsAppClick",
+      "description": "WhatsApp click telemetry and lead attribution event",
+      "type": "object",
+      "properties": {
+        "source_path": { "type": "string" },
+        "page_title": { "type": "string" },
+        "button_placement": { "type": "string", "enum": ["floating_widget", "navbar_cta", "footer_cta", "contact_page", "project_detail", "home_hero"] },
+        "split_test_variant": { "type": "string", "enum": ["variant_a", "variant_b"] },
+        "split_test_cta": { "type": "string" },
+        "device_type": { "type": "string", "enum": ["mobile", "tablet", "desktop"] },
+        "operating_system": { "type": "string" },
+        "browser_name": { "type": "string" },
+        "screen_resolution": { "type": "string" },
+        "viewport_size": { "type": "string" },
+        "language": { "type": "string" },
+        "referrer": { "type": "string" },
+        "prefilled_message": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["source_path", "button_placement", "created_at"]
+    },
+    "WhatsAppImpression": {
+      "title": "WhatsAppImpression",
+      "description": "Impression log for WhatsApp A/B split testing to calculate CTR",
+      "type": "object",
+      "properties": {
+        "variant_id": { "type": "string", "enum": ["variant_a", "variant_b"] },
+        "source_path": { "type": "string" },
+        "device_type": { "type": "string", "enum": ["mobile", "tablet", "desktop"] },
+        "created_at": { "type": "string" }
+      },
+      "required": ["variant_id", "created_at"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Admin users with RBAC roles and profiles"
+    },
+    "/projects/{projectId}": {
+      "schema": { "$ref": "#/entities/Project" },
+      "description": "Portfolio projects collection"
+    },
+    "/articles/{articleId}": {
+      "schema": { "$ref": "#/entities/Article" },
+      "description": "Editorial insight articles"
+    },
+    "/agency_members/{memberId}": {
+      "schema": { "$ref": "#/entities/AgencyMember" },
+      "description": "Team crew members"
+    },
+    "/client_logos/{logoId}": {
+      "schema": { "$ref": "#/entities/ClientLogo" },
+      "description": "Showcase client brand logos"
+    },
+    "/testimonials/{testimonialId}": {
+      "schema": { "$ref": "#/entities/Testimonial" },
+      "description": "Client testimonials and reviews"
+    },
+    "/agency_settings/{settingId}": {
+      "schema": { "$ref": "#/entities/AgencySettings" },
+      "description": "Agency operational contacts and settings"
+    },
+    "/inquiries/{inquiryId}": {
+      "schema": { "$ref": "#/entities/Inquiry" },
+      "description": "Prospective client project inquiries"
+    },
+    "/whatsapp_clicks/{clickId}": {
+      "schema": { "$ref": "#/entities/WhatsAppClick" },
+      "description": "Telemetry logs for WhatsApp click attribution and lead conversion"
+    },
+    "/whatsapp_impressions/{impressionId}": {
+      "schema": { "$ref": "#/entities/WhatsAppImpression" },
+      "description": "Impression events for calculating WhatsApp A/B split-test click-through rates"
+    },
+    "/production_schedules/{scheduleId}": {
+      "schema": { "$ref": "#/entities/ProductionSchedule" },
+      "description": "Agency production calendar timelines and shooting schedules"
+    },
+    "/moodboard_items/{itemId}": {
+      "schema": { "$ref": "#/entities/MoodboardItem" },
+      "description": "Pre-production visual reference elements, color palettes, styling, and location notes"
+    },
+    "/storyboard_scenes/{sceneId}": {
+      "schema": { "$ref": "#/entities/StoryboardScene" },
+      "description": "Commercial scene-by-scene storyboard frames, camera blocking, lens specs, and action beats"
+    }
+  }
+}
