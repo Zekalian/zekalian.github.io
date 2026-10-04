@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { ClientLogo } from '../../types/database';
 import { Image, Plus, Trash2, Edit2, Check, X, Eye, EyeOff } from 'lucide-react';
+import { ImgbbGuideButton, ImgbbViewerLinkWarning } from '../../components/admin/ImgbbGuideButton';
 
 export const AdminLogosPage: React.FC = () => {
   const { clientLogos, saveClientLogo, deleteClientLogo, currentUser } = useApp();
@@ -103,16 +104,20 @@ export const AdminLogosPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs uppercase font-bold text-slate-700 mb-1">
-                URL Logo (PNG / SVG Transparan)
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs uppercase font-bold text-slate-700">
+                  URL Logo (PNG / SVG Transparan)
+                </label>
+                <ImgbbGuideButton size="xs" />
+              </div>
               <input
                 type="text"
-                placeholder="https://.../logo.png"
+                placeholder="https://i.ibb.co/.../logo.png"
                 value={logoUrl}
                 onChange={(e) => setLogoUrl(e.target.value)}
                 className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-[#005DDD]"
               />
+              <ImgbbViewerLinkWarning url={logoUrl} />
             </div>
 
             <div>

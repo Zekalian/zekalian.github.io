@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useApp } from '../../context/AppContext';
 import { TeamMember } from '../../types/database';
 import { uploadFileToStorage, isWebPFile } from '../../lib/firebase';
+import { ImgbbGuideButton, ImgbbViewerLinkWarning } from '../../components/admin/ImgbbGuideButton';
 import { Users, Plus, Trash2, Edit2, ShieldAlert, Check, X, UploadCloud, Loader2, Link as LinkIcon } from 'lucide-react';
 
 export const AdminTeamPage: React.FC = () => {
@@ -217,15 +218,22 @@ export const AdminTeamPage: React.FC = () => {
                       </button>
                     )}
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <LinkIcon className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                  <div className="flex flex-col gap-1.5 pt-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-semibold text-slate-500 flex items-center gap-1">
+                        <LinkIcon className="w-3.5 h-3.5 text-slate-400" />
+                        <span>Atau tempel URL gambar (ImgBB / Cloud):</span>
+                      </span>
+                      <ImgbbGuideButton size="xs" />
+                    </div>
                     <input
                       type="text"
-                      placeholder="Atau tempel URL gambar langsung (https://...)"
+                      placeholder="https://i.ibb.co/... atau URL gambar langsung"
                       value={avatarUrl}
                       onChange={(e) => setAvatarUrl(e.target.value)}
-                      className="flex-1 px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-mono focus:outline-none focus:border-[#005DDD]"
+                      className="w-full px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-mono focus:outline-none focus:border-[#005DDD]"
                     />
+                    <ImgbbViewerLinkWarning url={avatarUrl} />
                   </div>
                 </div>
               </div>

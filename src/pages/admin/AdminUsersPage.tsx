@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { UserRole, AdminUser } from '../../types/database';
+import { ImgbbGuideButton, ImgbbViewerLinkWarning } from '../../components/admin/ImgbbGuideButton';
 import {
   Shield,
   UserPlus,
@@ -461,6 +462,23 @@ export const AdminUsersPage: React.FC = () => {
               </div>
 
               <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs uppercase font-bold text-slate-700">
+                    Foto Profil URL (Avatar)
+                  </label>
+                  <ImgbbGuideButton size="xs" />
+                </div>
+                <input
+                  type="url"
+                  placeholder="https://i.ibb.co/... atau URL gambar"
+                  value={avatarUrl}
+                  onChange={(e) => setAvatarUrl(e.target.value)}
+                  className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#005DDD]"
+                />
+                <ImgbbViewerLinkWarning url={avatarUrl} />
+              </div>
+
+              <div>
                 <label className="block text-xs uppercase font-bold text-slate-700 mb-1">
                   Kata Sandi Sementara <span className="text-rose-500">*</span>
                 </label>
@@ -600,16 +618,20 @@ export const AdminUsersPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs uppercase font-bold text-slate-700 mb-1">
-                  Foto Profil URL (Avatar)
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs uppercase font-bold text-slate-700">
+                    Foto Profil URL (Avatar)
+                  </label>
+                  <ImgbbGuideButton size="xs" />
+                </div>
                 <input
                   type="url"
-                  placeholder="https://..."
+                  placeholder="https://i.ibb.co/... atau URL gambar"
                   value={editAvatarUrl}
                   onChange={(e) => setEditAvatarUrl(e.target.value)}
                   className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#005DDD]"
                 />
+                <ImgbbViewerLinkWarning url={editAvatarUrl} />
               </div>
 
               <div className="pt-4 flex items-center justify-end gap-3 border-t border-slate-100">

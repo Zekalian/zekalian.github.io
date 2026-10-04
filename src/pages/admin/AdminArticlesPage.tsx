@@ -3,6 +3,7 @@ import { useApp } from '../../context/AppContext';
 import { Article } from '../../types/database';
 import { RichEditor } from '../../components/admin/RichEditor';
 import { uploadFileToStorage, isWebPFile } from '../../lib/firebase';
+import { ImgbbGuideButton, ImgbbViewerLinkWarning } from '../../components/admin/ImgbbGuideButton';
 import {
   FileText,
   Plus,
@@ -310,29 +311,23 @@ export const AdminArticlesPage: React.FC = () => {
 
                 {/* Option 2: Direct URL Input */}
                 <div className="border border-slate-200 rounded-2xl p-3.5 bg-white flex flex-col justify-center">
-                  <div className="flex items-center justify-between mb-1">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1.5">
                     <label className="text-[11px] font-bold text-slate-600 flex items-center gap-1">
                       <LinkIcon className="w-3 h-3 text-[#005DDD]" />
-                      <span>Atau Masukkan Tautan / Link Gambar (URL):</span>
+                      <span>Atau Masukkan Tautan / Link Gambar (ImgBB / URL):</span>
                     </label>
-                    <a
-                      href="#/admin/guide/imgbb"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[10px] font-bold text-[#005DDD] hover:underline"
-                    >
-                      Petunjuk Direct Link ImgBB &rarr;
-                    </a>
+                    <ImgbbGuideButton size="xs" />
                   </div>
                   <div className="flex gap-2">
                     <input
                       type="text"
-                      placeholder="https://images.unsplash.com/... atau https://i.ibb.co/..."
+                      placeholder="https://i.ibb.co/... atau URL gambar langsung"
                       value={coverImageUrl}
                       onChange={(e) => setCoverImageUrl(e.target.value)}
                       className="flex-1 px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-mono focus:outline-none focus:border-[#005DDD] focus:bg-white"
                     />
                   </div>
+                  <ImgbbViewerLinkWarning url={coverImageUrl} />
                   <p className="text-[10px] text-slate-400 mt-1">
                     Mendukung tautan gambar eksternal (ImgBB Direct Link, Unsplash, CDN, atau server web).
                   </p>

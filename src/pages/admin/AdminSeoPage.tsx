@@ -10,6 +10,7 @@ import {
   Image as ImageIcon,
   FileText,
 } from 'lucide-react';
+import { ImgbbGuideButton, ImgbbViewerLinkWarning } from '../../components/admin/ImgbbGuideButton';
 
 export const AdminSeoPage: React.FC = () => {
   const { settings, updateSettings, currentUser, addToast } = useApp();
@@ -183,18 +184,22 @@ export const AdminSeoPage: React.FC = () => {
 
             {/* OpenGraph Image */}
             <div className="space-y-2">
-              <label className="block text-xs uppercase font-bold tracking-wider text-slate-700 flex items-center gap-1.5">
-                <ImageIcon className="w-3.5 h-3.5 text-[#005DDD]" />
-                <span>URL Gambar Pratinjau Sosial (`og:image` / `twitter:image`)</span>
-              </label>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                <label className="block text-xs uppercase font-bold tracking-wider text-slate-700 flex items-center gap-1.5">
+                  <ImageIcon className="w-3.5 h-3.5 text-[#005DDD]" />
+                  <span>URL Gambar Pratinjau Sosial (`og:image` / `twitter:image`)</span>
+                </label>
+                <ImgbbGuideButton size="xs" />
+              </div>
               <input
                 type="url"
                 value={form.seo_og_image_url}
                 onChange={(e) => setForm({ ...form, seo_og_image_url: e.target.value })}
                 className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-[#005DDD]"
-                placeholder="https://images.unsplash.com/..."
+                placeholder="https://i.ibb.co/... atau https://images.unsplash.com/..."
               />
-              <p className="text-[11px] text-slate-400">Rekomendasi ukuran gambar: 1200 x 630 piksel berformat JPG atau PNG.</p>
+              <ImgbbViewerLinkWarning url={form.seo_og_image_url} />
+              <p className="text-[11px] text-slate-400">Rekomendasi ukuran gambar: 1200 x 630 piksel berformat JPG, WEBP, atau PNG.</p>
             </div>
 
             {/* Keywords & Twitter Card */}

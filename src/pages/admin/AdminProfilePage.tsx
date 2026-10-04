@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useApp } from '../../context/AppContext';
 import { UserRole, AdminUser } from '../../types/database';
 import { isWebPFile } from '../../lib/firebase';
+import { ImgbbGuideButton, ImgbbViewerLinkWarning } from '../../components/admin/ImgbbGuideButton';
 import {
   User,
   Mail,
@@ -302,9 +303,12 @@ export const AdminProfilePage: React.FC<AdminProfilePageProps> = () => {
             {/* Foto Profil / Avatar */}
             <div className="space-y-3">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
-                <label className="block text-xs uppercase font-bold text-slate-700">
-                  Foto Profil (Avatar)
-                </label>
+                <div className="flex items-center gap-2">
+                  <label className="block text-xs uppercase font-bold text-slate-700">
+                    Foto Profil (Avatar)
+                  </label>
+                  <ImgbbGuideButton size="xs" />
+                </div>
                 <div className="inline-flex items-center gap-1.5 bg-blue-50 text-[#005DDD] font-bold border border-blue-200/80 px-2.5 py-0.5 rounded-lg text-[11px]">
                   <span className="w-2 h-2 rounded-full bg-[#005DDD]"></span>
                   <span>Wajib Format .WebP atau Gunakan Tautan Link (URL)</span>
@@ -314,7 +318,7 @@ export const AdminProfilePage: React.FC<AdminProfilePageProps> = () => {
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
                 <input
                   type="url"
-                  placeholder="https://images.unsplash.com/... atau URL foto"
+                  placeholder="https://i.ibb.co/... atau URL foto langsung"
                   value={avatarUrl}
                   onChange={(e) => setAvatarUrl(e.target.value)}
                   className="flex-1 w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#005DDD]"
@@ -350,6 +354,8 @@ export const AdminProfilePage: React.FC<AdminProfilePageProps> = () => {
                   )}
                 </div>
               </div>
+
+              <ImgbbViewerLinkWarning url={avatarUrl} />
 
               {/* Preset Avatar Selection */}
               <div>

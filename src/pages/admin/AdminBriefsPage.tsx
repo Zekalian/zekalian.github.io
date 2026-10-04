@@ -3,6 +3,7 @@ import { ClipboardList, Plus, Trash2, Printer, Save, Eye, X, Edit3, Image as Ima
 import { useApp } from '../../context/AppContext';
 import { db, removeUndefinedFields, isWebPFile } from '../../lib/firebase';
 import { collection, doc, setDoc, deleteDoc, onSnapshot } from 'firebase/firestore';
+import { ImgbbGuideButton, ImgbbViewerLinkWarning } from '../../components/admin/ImgbbGuideButton';
 
 interface BriefReference {
   id: string;
@@ -517,7 +518,7 @@ export const AdminBriefsPage: React.FC = () => {
                     <div>
                       <div className="flex items-center justify-between mb-1">
                         <label className="block text-[11px] font-bold uppercase text-slate-600">File Gambar (Upload .WebP atau Tautan Link)</label>
-                        <span className="text-[10px] text-[#005DDD] font-bold">Wajib .WebP / URL</span>
+                        <ImgbbGuideButton size="xs" />
                       </div>
                       <input
                         type="file"
@@ -528,12 +529,13 @@ export const AdminBriefsPage: React.FC = () => {
                       <div className="mt-1.5 flex gap-2 items-center">
                         <input
                           type="text"
-                          placeholder="Atau tempel URL gambar (https://...)"
+                          placeholder="Atau tempel Direct Link ImgBB / URL gambar (https://...)"
                           value={ref.imgUrl && !ref.imgUrl.startsWith('data:') ? ref.imgUrl : ''}
                           onChange={e => handleUpdateReference(idx, 'imgUrl', e.target.value)}
                           className="flex-1 px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-mono bg-white focus:outline-none focus:border-[#005DDD]"
                         />
                       </div>
+                      <ImgbbViewerLinkWarning url={ref.imgUrl || ''} />
                       {ref.imgUrl && (
                         <div className="mt-2 h-32 rounded-xl border border-slate-200 bg-white overflow-hidden flex items-center justify-center">
                           <img src={ref.imgUrl} alt={ref.title || 'Preview'} className="max-h-full max-w-full object-contain" />

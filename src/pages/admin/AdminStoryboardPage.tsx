@@ -30,6 +30,7 @@ import {
 import { useApp } from '../../context/AppContext';
 import { db, uploadFileToStorage, isWebPFile, safeSetDoc } from '../../lib/firebase';
 import { collection, onSnapshot, doc, deleteDoc } from 'firebase/firestore';
+import { ImgbbGuideButton } from '../../components/admin/ImgbbGuideButton';
 
 // Types
 export type MoodboardCategory =
@@ -1305,7 +1306,10 @@ export const AdminStoryboardPage: React.FC = () => {
 
               {/* Visual Image URL / Upload */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">URL Sketsa / Frame Gambar</label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-bold text-slate-700">URL Sketsa / Frame Gambar</label>
+                  <ImgbbGuideButton size="xs" />
+                </div>
                 <div className="flex gap-2">
                   <input
                     type="url"
@@ -1313,7 +1317,7 @@ export const AdminStoryboardPage: React.FC = () => {
                     name="image_url"
                     required
                     defaultValue={editingStoryScene?.image_url || ''}
-                    placeholder="https://images.unsplash.com/... atau unggah gambar"
+                    placeholder="https://i.ibb.co/... atau URL gambar langsung"
                     className="flex-1 px-3 py-2 text-xs border border-slate-200 rounded-xl outline-none focus:border-[#005DDD]"
                   />
                   <input
@@ -1471,7 +1475,10 @@ export const AdminStoryboardPage: React.FC = () => {
 
               {/* Image URL & File Upload */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">URL Foto Referensi Visual</label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-bold text-slate-700">URL Foto Referensi Visual</label>
+                  <ImgbbGuideButton size="xs" />
+                </div>
                 <div className="flex gap-2">
                   <input
                     type="url"
@@ -1479,7 +1486,7 @@ export const AdminStoryboardPage: React.FC = () => {
                     name="image_url"
                     required
                     defaultValue={editingMoodItem?.image_url || ''}
-                    placeholder="https://images.unsplash.com/... atau unggah berkas"
+                    placeholder="https://i.ibb.co/... atau URL gambar langsung"
                     className="flex-1 px-3 py-2 text-xs border border-slate-200 rounded-xl outline-none focus:border-[#005DDD]"
                   />
                   <input
