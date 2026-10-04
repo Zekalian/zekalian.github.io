@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { Project, ProjectCrew, ProjectMedia } from '../../types/database';
 import { uploadFileToStorage } from '../../lib/firebase';
@@ -20,6 +20,9 @@ import {
   CheckCircle2,
   AlertCircle,
   Link as LinkIcon,
+  Globe,
+  UserCheck,
+  Sparkles,
 } from 'lucide-react';
 
 interface AdminProjectsPageProps {
@@ -27,7 +30,7 @@ interface AdminProjectsPageProps {
 }
 
 export const AdminProjectsPage: React.FC<AdminProjectsPageProps> = ({ onNavigate }) => {
-  const { projects, categories, teamMembers, saveProject, deleteProject, currentUser } = useApp();
+  const { projects, categories, teamMembers, adminUsers, saveProject, deleteProject, currentUser } = useApp();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
 
@@ -57,12 +60,67 @@ export const AdminProjectsPage: React.FC<AdminProjectsPageProps> = ({ onNavigate
   const [uploadProgressText, setUploadProgressText] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Crew assignments
-  const [assignedCrews, setAssignedCrews] = useState<
-    Array<{ team_member_id: string; custom_role_in_project: string }>
-  >([]);
-  const [selectedCrewMemberId, setSelectedCrewMemberId] = useState(teamMembers[0]?.id || '');
+  // Crew assignments state
+  interface AssignedCrewItem {
+    id?: string;
+    team_member_id?: string;
+    member_name: string;
+    custom_role_in_project: string;
+    is_external?: boolean;
+  }
+
+  const [assignedCrews, setAssignedCrews] = useState<AssignedCrewItem[]>([]);
+  const [crewSourceMode, setCrewSourceMode] = useState<'internal' | 'external'>('internal');
+  const [selectedInternalCrewId, setSelectedInternalCrewId] = useState('');
+  const [externalCrewName, setExternalCrewName] = useState('');
   const [selectedCrewRole, setSelectedCrewRole] = useState('DIRECTOR');
+
+  // Unified list of all internal members (team profiles + registered user accounts)
+  const availableInternalCrew = useMemo(() => {
+    const list: Array<{
+      id: string;
+      name: string;
+      subtext: string;
+      originalId: string;
+      type: 'team' | 'user';
+    }> = [];
+    const seenNames = new Set<string>();
+
+    // 1. Registered Team Members (Public Profiles)
+    teamMembers.forEach((tm) => {
+      seenNames.add(tm.full_name.toLowerCase().trim());
+      list.push({
+        id: `tm-${tm.id}`,
+        name: tm.full_name,
+        subtext: `${tm.default_role} (Profil Tim)`,
+        originalId: tm.id,
+        type: 'team',
+      });
+    });
+
+    // 2. Registered Admin Users / Studio Staff (Accounts)
+    (adminUsers || []).forEach((au) => {
+      const name = au.full_name || au.username;
+      if (!seenNames.has(name.toLowerCase().trim())) {
+        seenNames.add(name.toLowerCase().trim());
+        list.push({
+          id: `au-${au.id}`,
+          name: name,
+          subtext: `${au.email} • Staff (${au.role.toUpperCase()})`,
+          originalId: au.id,
+          type: 'user',
+        });
+      }
+    });
+
+    return list;
+  }, [teamMembers, adminUsers]);
+
+  useEffect(() => {
+    if (!selectedInternalCrewId && availableInternalCrew.length > 0) {
+      setSelectedInternalCrewId(availableInternalCrew[0].id);
+    }
+  }, [availableInternalCrew, selectedInternalCrewId]);
 
   const isAnalyst = currentUser?.role === 'analyst';
 
@@ -84,6 +142,11 @@ export const AdminProjectsPage: React.FC<AdminProjectsPageProps> = ({ onNavigate
     setTargetDeliveryDate('');
     setMediaList([]);
     setAssignedCrews([]);
+    setExternalCrewName('');
+    setCrewSourceMode('internal');
+    if (availableInternalCrew.length > 0) {
+      setSelectedInternalCrewId(availableInternalCrew[0].id);
+    }
   };
 
   const handleStartCreate = () => {
@@ -110,10 +173,18 @@ export const AdminProjectsPage: React.FC<AdminProjectsPageProps> = ({ onNavigate
       p.media?.map((m) => ({ image_url: m.image_url, caption: m.caption })) || []
     );
     setAssignedCrews(
-      p.crews?.map((c) => ({
-        team_member_id: c.team_member_id,
-        custom_role_in_project: c.custom_role_in_project,
-      })) || []
+      p.crews?.map((c) => {
+        const tm = teamMembers.find((m) => m.id === c.team_member_id);
+        const au = adminUsers?.find((u) => u.id === c.team_member_id);
+        const memberName = c.member_name || tm?.full_name || au?.full_name || 'Kru Proyek';
+        return {
+          id: c.id,
+          team_member_id: c.team_member_id || '',
+          member_name: memberName,
+          custom_role_in_project: c.custom_role_in_project,
+          is_external: c.is_external || (!c.team_member_id && !!c.member_name),
+        };
+      }) || []
     );
     setIsFormOpen(true);
   };
@@ -220,20 +291,59 @@ export const AdminProjectsPage: React.FC<AdminProjectsPageProps> = ({ onNavigate
   };
 
   const handleAddCrew = () => {
-    if (!selectedCrewMemberId || !selectedCrewRole.trim()) return;
-    // prevent duplicate member
-    if (assignedCrews.some((c) => c.team_member_id === selectedCrewMemberId)) {
-      alert('Anggota kru ini sudah ditugaskan pada proyek.');
-      return;
+    const roleTrimmed = selectedCrewRole.trim().toUpperCase() || 'CREW';
+
+    if (crewSourceMode === 'internal') {
+      if (!selectedInternalCrewId) {
+        alert('Silakan pilih anggota kru internal terlebih dahulu.');
+        return;
+      }
+      const targetOption = availableInternalCrew.find((c) => c.id === selectedInternalCrewId);
+      if (!targetOption) return;
+
+      // prevent duplicate
+      if (assignedCrews.some((c) => c.team_member_id === targetOption.originalId)) {
+        alert('Anggota kru ini sudah ditugaskan pada proyek.');
+        return;
+      }
+
+      setAssignedCrews([
+        ...assignedCrews,
+        {
+          team_member_id: targetOption.originalId,
+          member_name: targetOption.name,
+          custom_role_in_project: roleTrimmed,
+          is_external: false,
+        },
+      ]);
+    } else {
+      // External / freelance crew
+      const extName = externalCrewName.trim();
+      if (!extName) {
+        alert('Silakan masukkan nama lengkap kru eksternal atau freelancer.');
+        return;
+      }
+
+      if (assignedCrews.some((c) => c.member_name.toLowerCase() === extName.toLowerCase())) {
+        alert('Nama kru eksternal ini sudah ada dalam daftar tugas.');
+        return;
+      }
+
+      setAssignedCrews([
+        ...assignedCrews,
+        {
+          team_member_id: '',
+          member_name: extName,
+          custom_role_in_project: roleTrimmed,
+          is_external: true,
+        },
+      ]);
+      setExternalCrewName('');
     }
-    setAssignedCrews([
-      ...assignedCrews,
-      { team_member_id: selectedCrewMemberId, custom_role_in_project: selectedCrewRole.trim() },
-    ]);
   };
 
-  const handleRemoveCrew = (memberId: string) => {
-    setAssignedCrews(assignedCrews.filter((c) => c.team_member_id !== memberId));
+  const handleRemoveCrew = (index: number) => {
+    setAssignedCrews(assignedCrews.filter((_, idx) => idx !== index));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -249,9 +359,11 @@ export const AdminProjectsPage: React.FC<AdminProjectsPageProps> = ({ onNavigate
     }));
 
     const formattedCrews: ProjectCrew[] = assignedCrews.map((c, idx) => ({
-      id: 'crew-' + Date.now() + '-' + idx,
+      id: c.id || ('crew-' + Date.now() + '-' + idx),
       project_id: editingProject?.id || '',
-      team_member_id: c.team_member_id,
+      team_member_id: c.team_member_id || undefined,
+      member_name: c.member_name,
+      is_external: c.is_external || false,
       custom_role_in_project: c.custom_role_in_project.toUpperCase(),
     }));
 
@@ -692,66 +804,164 @@ export const AdminProjectsPage: React.FC<AdminProjectsPageProps> = ({ onNavigate
 
           {/* Project Crew Assignment (PRD Section 5) */}
           <div className="p-6 rounded-2xl bg-sky-50/50 border border-sky-100 space-y-4">
-            <div className="flex items-center justify-between">
-              <h4 className="text-xs uppercase font-bold tracking-wider text-slate-700 flex items-center gap-1.5">
-                <Users className="w-4 h-4 text-[#005DDD]" />
-                <span>Penugasan Kru Spesifik Proyek (Project Credits)</span>
-              </h4>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h4 className="text-xs uppercase font-bold tracking-wider text-slate-800 flex items-center gap-1.5">
+                  <Users className="w-4 h-4 text-[#005DDD]" />
+                  <span>Penugasan Kru &amp; Kredit Proyek (Project Credits)</span>
+                </h4>
+                <p className="text-[11px] text-slate-500 mt-0.5">
+                  Tugaskan anggota tim internal, akun staf terdaftar, maupun kolaborator eksternal/freelancer.
+                </p>
+              </div>
+
+              {/* Mode Switcher */}
+              <div className="inline-flex p-1 rounded-xl bg-slate-200/80 text-[11px] font-bold">
+                <button
+                  type="button"
+                  onClick={() => setCrewSourceMode('internal')}
+                  className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
+                    crewSourceMode === 'internal'
+                      ? 'bg-white text-slate-900 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <UserCheck className="w-3.5 h-3.5 text-[#005DDD]" />
+                  <span>Kru Internal ({availableInternalCrew.length})</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCrewSourceMode('external')}
+                  className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
+                    crewSourceMode === 'external'
+                      ? 'bg-white text-amber-900 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <Globe className="w-3.5 h-3.5 text-amber-600" />
+                  <span>+ Kru Eksternal / Freelance</span>
+                </button>
+              </div>
             </div>
 
+            {/* Input Row */}
             <div className="flex flex-col sm:flex-row gap-2">
-              <select
-                value={selectedCrewMemberId}
-                onChange={(e) => setSelectedCrewMemberId(e.target.value)}
-                className="flex-1 px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold"
-              >
-                {teamMembers.map((m) => (
-                  <option key={m.id} value={m.id}>
-                    {m.full_name} ({m.default_role})
-                  </option>
-                ))}
-              </select>
+              {crewSourceMode === 'internal' ? (
+                <select
+                  value={selectedInternalCrewId}
+                  onChange={(e) => setSelectedInternalCrewId(e.target.value)}
+                  className="flex-1 px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#005DDD]"
+                >
+                  {availableInternalCrew.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name} — {c.subtext}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  type="text"
+                  placeholder="Nama Lengkap Kru Eksternal / Kolaborator (misal: Dimas Yoga, Soundscape Studio)"
+                  value={externalCrewName}
+                  onChange={(e) => setExternalCrewName(e.target.value)}
+                  className="flex-1 px-3 py-2.5 rounded-xl bg-white border border-amber-300 text-xs font-semibold text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-amber-500"
+                />
+              )}
 
               <input
                 type="text"
                 placeholder="Peran khusus (misal: DIRECTOR, DOP, COLORIST)"
                 value={selectedCrewRole}
                 onChange={(e) => setSelectedCrewRole(e.target.value)}
-                className="flex-1 px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs uppercase"
+                className="w-full sm:w-64 px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-bold uppercase text-slate-800 focus:outline-none focus:border-[#005DDD]"
               />
 
               <button
                 type="button"
                 onClick={handleAddCrew}
-                className="px-4 py-2 rounded-xl bg-[#005DDD] text-white text-xs font-bold shrink-0 hover:bg-[#018EE3]"
+                className="px-5 py-2.5 rounded-xl bg-[#005DDD] hover:bg-[#004bb5] text-white text-xs font-bold shrink-0 transition-all shadow-xs cursor-pointer flex items-center justify-center gap-1.5"
               >
-                + Tugaskan Kru
+                <Plus className="w-4 h-4" />
+                <span>Tugaskan Kru</span>
               </button>
             </div>
 
+            {/* Quick Role Suggestions */}
+            <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
+              <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                Preset Peran:
+              </span>
+              {[
+                'DIRECTOR',
+                'DOP',
+                'PRODUCER',
+                'EDITOR',
+                'COLORIST',
+                'SOUND DESIGNER',
+                'DRONE PILOT',
+                'TALENT / MODEL',
+                'MUA / STYLIST',
+              ].map((role) => (
+                <button
+                  key={role}
+                  type="button"
+                  onClick={() => setSelectedCrewRole(role)}
+                  className={`text-[10px] font-bold px-2 py-0.5 rounded-md border transition-all cursor-pointer ${
+                    selectedCrewRole.toUpperCase() === role
+                      ? 'bg-[#005DDD] text-white border-[#005DDD]'
+                      : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                  }`}
+                >
+                  {role}
+                </button>
+              ))}
+            </div>
+
+            {/* Assigned Crews List (Chips) */}
             {assignedCrews.length > 0 && (
-              <div className="flex flex-wrap gap-2 pt-2">
-                {assignedCrews.map((c) => {
-                  const m = teamMembers.find((item) => item.id === c.team_member_id);
-                  return (
-                    <div
-                      key={c.team_member_id}
-                      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-medium shadow-2xs"
-                    >
-                      <span className="font-bold text-slate-900">{m?.full_name}</span>
-                      <span className="text-[10px] font-black uppercase text-[#005DDD] bg-sky-50 px-1.5 py-0.5 rounded">
-                        {c.custom_role_in_project}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveCrew(c.team_member_id)}
-                        className="text-slate-400 hover:text-rose-600"
+              <div className="pt-2 border-t border-sky-100/80">
+                <span className="text-[11px] font-bold text-slate-600 block mb-2">
+                  Kru Ditugaskan ({assignedCrews.length}):
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  {assignedCrews.map((c, idx) => {
+                    const isExt = c.is_external;
+                    return (
+                      <div
+                        key={idx}
+                        className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-medium shadow-2xs ${
+                          isExt
+                            ? 'bg-amber-50/80 border-amber-200/90 text-amber-950'
+                            : 'bg-white border-slate-200 text-slate-900'
+                        }`}
                       >
-                        &times;
-                      </button>
-                    </div>
-                  );
-                })}
+                        <span className="font-bold">{c.member_name}</span>
+                        <span
+                          className={`text-[10px] font-black uppercase px-1.5 py-0.5 rounded ${
+                            isExt
+                              ? 'bg-amber-200/60 text-amber-900'
+                              : 'bg-sky-50 text-[#005DDD]'
+                          }`}
+                        >
+                          {c.custom_role_in_project}
+                        </span>
+                        {isExt && (
+                          <span className="text-[9px] font-bold uppercase tracking-wider text-amber-700 bg-white/80 border border-amber-300 px-1 rounded">
+                            Eksternal
+                          </span>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveCrew(idx)}
+                          className="text-slate-400 hover:text-rose-600 ml-1 cursor-pointer font-bold"
+                          title="Hapus penugasan kru"
+                        >
+                          &times;
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             )}
           </div>

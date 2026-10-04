@@ -169,8 +169,10 @@ export interface ProjectMedia {
 export interface ProjectCrew {
   id: string;
   project_id: string;
-  team_member_id: string;
+  team_member_id?: string;
   custom_role_in_project: string;
+  member_name?: string;
+  is_external?: boolean;
   // Joined member details
   member?: TeamMember;
 }

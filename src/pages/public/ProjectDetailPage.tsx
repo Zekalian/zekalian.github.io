@@ -31,7 +31,7 @@ interface ProjectDetailPageProps {
 const AVATAR_COLORS = ['#EF4444', '#F59E0B', '#0284C7', '#EC4899', '#10B981', '#6366F1'];
 
 export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ slug, onNavigate }) => {
-  const { projects, categories, teamMembers, addToast, settings, recordShareEvent } = useApp();
+  const { projects, categories, teamMembers, adminUsers, addToast, settings, recordShareEvent } = useApp();
   const { currentVariant, handleWhatsAppClick, getVariantMessage } = useWhatsAppTracker();
 
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -346,20 +346,32 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ slug, onNa
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             {project.crews.map((crewItem, idx) => {
               const matchedMember = teamMembers.find((m) => m.id === crewItem.team_member_id);
-              if (!matchedMember) return null;
-
+              const matchedAdmin = adminUsers?.find((u) => u.id === crewItem.team_member_id);
+              const fullName = crewItem.member_name || matchedMember?.full_name || matchedAdmin?.full_name || 'Kru Proyek';
+              const initials = (fullName || 'ZK')
+                .split(' ')
+                .filter(Boolean)
+                .map((n) => n[0])
+                .slice(0, 2)
+                .join('')
+                .toUpperCase() || 'ZK';
+              const isExternal = crewItem.is_external || (!matchedMember && !matchedAdmin);
               const avatarBgColor = AVATAR_COLORS[idx % AVATAR_COLORS.length];
 
               return (
                 <div
                   key={crewItem.id || idx}
-                  onClick={() =>
-                    setSelectedCrew({
-                      member: matchedMember,
-                      customRole: crewItem.custom_role_in_project,
-                    })
-                  }
-                  className="group bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs hover:border-[#005DDD]/40 hover:shadow-md transition-all cursor-pointer flex items-center justify-between"
+                  onClick={() => {
+                    if (matchedMember) {
+                      setSelectedCrew({
+                        member: matchedMember,
+                        customRole: crewItem.custom_role_in_project,
+                      });
+                    }
+                  }}
+                  className={`group bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs hover:border-[#005DDD]/40 hover:shadow-md transition-all flex items-center justify-between ${
+                    matchedMember ? 'cursor-pointer' : 'cursor-default'
+                  }`}
                 >
                   <div className="flex items-center gap-4">
                     {/* Vibrant Initial Avatar */}
@@ -367,20 +379,29 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ slug, onNa
                       className="w-13 h-13 rounded-2xl text-white font-extrabold text-sm flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform"
                       style={{ backgroundColor: avatarBgColor }}
                     >
-                      {matchedMember.initials}
+                      {matchedMember?.initials || initials}
                     </div>
 
                     <div>
-                      <h4 className="text-base font-bold text-slate-900 group-hover:text-[#005DDD] transition-colors">
-                        {matchedMember.full_name}
-                      </h4>
+                      <div className="flex items-center gap-2">
+                        <h4 className="text-base font-bold text-slate-900 group-hover:text-[#005DDD] transition-colors">
+                          {fullName}
+                        </h4>
+                        {isExternal && (
+                          <span className="text-[9px] font-black uppercase tracking-wider text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded">
+                            Eksternal
+                          </span>
+                        )}
+                      </div>
                       <span className="text-[11px] font-black uppercase tracking-wider text-[#005DDD]">
                         {crewItem.custom_role_in_project}
                       </span>
                     </div>
                   </div>
 
-                  <ArrowUpRight className="w-4 h-4 text-slate-300 group-hover:text-[#005DDD] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                  {matchedMember ? (
+                    <ArrowUpRight className="w-4 h-4 text-slate-300 group-hover:text-[#005DDD] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                  ) : null}
                 </div>
               );
             })}
