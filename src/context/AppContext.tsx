@@ -676,6 +676,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       return { success: true };
     } catch (err: any) {
       console.error('Google Sign In error:', err);
+      if (err.code === 'auth/unauthorized-domain' || (err.message && err.message.includes('unauthorized-domain'))) {
+        return {
+          success: false,
+          error: 'Domain ini belum didaftarkan di Firebase Auth (Authorized Domains). Silakan masuk langsung menggunakan Kredensial Username & Password di bawah, atau tambahkan domain Anda di Firebase Console.',
+        };
+      }
       return {
         success: false,
         error: err.message || 'Gagal masuk dengan Google.',
