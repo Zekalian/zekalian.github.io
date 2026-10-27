@@ -91,7 +91,7 @@ interface AppContextType {
   currentUser: AdminUser | null;
   firebaseAuthUser: FirebaseUser | null;
   login: (identifier: string, pass: string) => Promise<{ success: boolean; error?: string }>;
-  loginWithGoogle: () => Promise<{ success: boolean; error?: string }>;
+  loginWithGoogle: () => Promise<{ success: boolean; cancelled?: boolean; error?: string }>;
   logout: () => Promise<void>;
   switchRole: (role: UserRole) => void;
 
@@ -639,7 +639,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, []);
 
   // Google Login via Firebase Auth
-  const loginWithGoogle = async (): Promise<{ success: boolean; error?: string }> => {
+  const loginWithGoogle = async (): Promise<{ success: boolean; cancelled?: boolean; error?: string }> => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const fbUser = result.user;
@@ -675,16 +675,45 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       addToast(`Berhasil masuk dengan akun Google: ${targetUser.full_name}`, 'success');
       return { success: true };
     } catch (err: any) {
-      console.error('Google Sign In error:', err);
-      if (err.code === 'auth/unauthorized-domain' || (err.message && err.message.includes('unauthorized-domain'))) {
+      const errorCode = err?.code || '';
+      const errorMsg = err?.message || '';
+
+      // Gracefully handle user cancelling or closing the popup dialog
+      if (
+        errorCode === 'auth/popup-closed-by-user' ||
+        errorMsg.includes('popup-closed-by-user') ||
+        errorCode === 'auth/cancelled-popup-request' ||
+        errorMsg.includes('cancelled-popup-request')
+      ) {
+        // User closed or dismissed the popup. This is a normal user cancellation, not a system failure.
+        console.info('Google Sign-In popup was closed by the user.');
+        return {
+          success: false,
+          cancelled: true,
+          error: 'Proses masuk dengan Google dibatalkan karena jendela ditutup.',
+        };
+      }
+
+      if (errorCode === 'auth/popup-blocked' || errorMsg.includes('popup-blocked')) {
+        console.warn('Google Sign-In popup was blocked by browser.');
+        return {
+          success: false,
+          error: 'Jendela popup Google Sign-In diblokir oleh browser. Harap izinkan pop-up untuk situs ini lalu coba lagi.',
+        };
+      }
+
+      if (errorCode === 'auth/unauthorized-domain' || errorMsg.includes('unauthorized-domain')) {
+        console.warn('Google Sign-In unauthorized domain:', errorMsg);
         return {
           success: false,
           error: 'Domain ini belum didaftarkan di Firebase Auth (Authorized Domains). Silakan masuk langsung menggunakan Kredensial Username & Password di bawah, atau tambahkan domain Anda di Firebase Console.',
         };
       }
+
+      console.error('Google Sign In error:', err);
       return {
         success: false,
-        error: err.message || 'Gagal masuk dengan Google.',
+        error: errorMsg || 'Gagal masuk dengan Google.',
       };
     }
   };

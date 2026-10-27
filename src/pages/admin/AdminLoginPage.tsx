@@ -72,6 +72,9 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({ onNavigate }) =>
 
     if (res.success) {
       onNavigate('/admin');
+    } else if (res.cancelled) {
+      // User cancelled or closed the popup voluntarily, no error state needed
+      setError('');
     } else {
       setError(res.error || 'Gagal masuk dengan akun Google.');
     }
