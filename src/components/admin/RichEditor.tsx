@@ -11,6 +11,8 @@ import {
   Eye,
   Undo2,
   Redo2,
+  List,
+  ListOrdered,
   UploadCloud,
   Loader2,
   Link as LinkIcon,
@@ -21,9 +23,11 @@ import {
 interface RichEditorProps {
   content: string;
   onChange: (html: string) => void;
+  placeholder?: string;
+  minHeight?: string;
 }
 
-export const RichEditor: React.FC<RichEditorProps> = ({ content, onChange }) => {
+export const RichEditor: React.FC<RichEditorProps> = ({ content, onChange, placeholder, minHeight }) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const [activeTab, setActiveTab] = useState<'write' | 'preview'>('write');
   const [htmlContent, setHtmlContent] = useState<string>(content || '');
@@ -221,6 +225,28 @@ export const RichEditor: React.FC<RichEditorProps> = ({ content, onChange }) => 
 
           <button
             type="button"
+            onClick={() => executeCommand('insertUnorderedList')}
+            className="p-2 rounded-lg text-slate-700 hover:bg-slate-200 transition-colors flex items-center gap-1 font-bold"
+            title="Daftar Poin (Bullet List)"
+          >
+            <List className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Poin</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => executeCommand('insertOrderedList')}
+            className="p-2 rounded-lg text-slate-700 hover:bg-slate-200 transition-colors flex items-center gap-1 font-bold"
+            title="Daftar Nomor (Numbered List)"
+          >
+            <ListOrdered className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Nomor</span>
+          </button>
+
+          <div className="h-4 w-px bg-slate-300 mx-1" />
+
+          <button
+            type="button"
             onClick={handleOpenImageModal}
             className="px-3 py-1.5 rounded-lg bg-sky-50 text-[#005DDD] hover:bg-sky-100 font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
           >
@@ -267,13 +293,17 @@ export const RichEditor: React.FC<RichEditorProps> = ({ content, onChange }) => 
         <div
           ref={editorRef}
           contentEditable
+          data-placeholder={placeholder || 'Mulai menulis di sini...'}
           onInput={handleInput}
           onBlur={handleInput}
-          className="w-full p-5 text-sm text-slate-800 focus:outline-none min-h-[320px] bg-white overflow-y-auto prose prose-slate max-w-none leading-relaxed"
-          style={{ wordBreak: 'break-word' }}
+          className="w-full p-5 text-sm text-slate-800 focus:outline-none min-h-[320px] bg-white overflow-y-auto prose prose-slate max-w-none leading-relaxed [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:my-2 [&_li]:my-1 [&_strong]:font-bold [&_b]:font-bold"
+          style={{ minHeight: minHeight || '320px', wordBreak: 'break-word' }}
         />
       ) : (
-        <div className="p-6 bg-slate-50 min-h-[320px] prose prose-slate max-w-none text-sm text-slate-700 leading-relaxed overflow-y-auto">
+        <div
+          className="p-6 bg-slate-50 min-h-[320px] prose prose-slate max-w-none text-sm text-slate-700 leading-relaxed overflow-y-auto [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:my-2 [&_li]:my-1 [&_strong]:font-bold [&_b]:font-bold"
+          style={{ minHeight: minHeight || '320px' }}
+        >
           {htmlContent ? (
             <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
           ) : (

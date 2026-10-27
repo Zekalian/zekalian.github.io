@@ -269,7 +269,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                         {project.title}
                       </h3>
                       <p className="mt-2 text-xs text-[#334155] line-clamp-2 leading-relaxed">
-                        {project.description}
+                        {project.description ? project.description.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim() : ''}
                       </p>
                     </div>
 

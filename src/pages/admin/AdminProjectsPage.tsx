@@ -27,6 +27,7 @@ import {
   FileText,
 } from 'lucide-react';
 import { ImgbbGuideModal } from '../../components/admin/ImgbbGuideModal';
+import { RichEditor } from '../../components/admin/RichEditor';
 
 interface AdminProjectsPageProps {
   onNavigate?: (route: string) => void;
@@ -517,29 +518,23 @@ export const AdminProjectsPage: React.FC<AdminProjectsPageProps> = ({ onNavigate
             </div>
           </div>
 
-          {/* Deskripsi & Narasi Proyek */}
-          <div className="space-y-1.5">
+          {/* Deskripsi & Narasi Proyek (Rich Text Editor) */}
+          <div className="space-y-2">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
               <label className="block text-xs uppercase font-bold text-slate-700 flex items-center gap-1.5">
                 <FileText className="w-3.5 h-3.5 text-[#005DDD]" />
-                <span>Deskripsi &amp; Narasi Proyek (Studi Kasus) *</span>
+                <span>Deskripsi &amp; Narasi Proyek (Rich Text &amp; Poin) *</span>
               </label>
               <span className="text-[11px] text-slate-400 font-medium">
-                Ditampilkan di halaman detail proyek untuk menguraikan latar belakang, konsep &amp; hasil karya
+                Mendukung teks tebal (Bold), poin daftar (Bullet List), nomor, kutipan, dan sub-judul
               </span>
             </div>
-            <textarea
-              rows={4}
-              required
-              placeholder="Ceritakan narasi proyek di sini...\nContoh:\nKampanye visual ini dirancang untuk merumuskan ulang identitas merek di platform digital. Melalui pendekatan sinematografi yang dinamis dan pewarnaan modern, kami memproduksi video komersial utama serta serangkaian aset konten media sosial yang berhasil meningkatkan engagement hingga 140%."
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-[#005DDD] leading-relaxed resize-y min-h-[110px]"
+            <RichEditor
+              content={description}
+              onChange={setDescription}
+              placeholder="Tulis narasi lengkap proyek di sini... Anda dapat menebalkan teks (Bold), membuat daftar poin (Bullet), nomor, dan subjudul layaknya editor artikel."
+              minHeight="180px"
             />
-            <div className="flex items-center justify-between text-[11px] text-slate-400">
-              <span>Mendukung teks multi-baris (enter / paragraf baru).</span>
-              <span className="font-mono text-slate-500 font-semibold">{description.length} karakter</span>
-            </div>
           </div>
 
           {/* Milestone & Progress Tracking */}

@@ -287,9 +287,16 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ slug, onNa
           <h2 className="text-2xl font-bold text-slate-900 mb-4 tracking-tight">
             Narasi &amp; Ruang Lingkup Proyek
           </h2>
-          <div className="text-base text-[#334155] leading-relaxed space-y-4">
-            <p className="whitespace-pre-line">{project.description}</p>
-          </div>
+          <div
+            className="text-base text-[#334155] leading-relaxed prose prose-slate max-w-none space-y-4 [&_p]:mb-3 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:my-3 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:my-3 [&_li]:my-1.5 [&_strong]:font-bold [&_strong]:text-slate-900 [&_b]:font-bold [&_b]:text-slate-900 [&_h2]:text-xl [&_h2]:font-extrabold [&_h2]:text-slate-900 [&_h2]:mt-6 [&_h2]:mb-3 [&_h3]:text-lg [&_h3]:font-bold [&_h3]:text-slate-900 [&_h3]:mt-4 [&_h3]:mb-2 [&_blockquote]:border-l-4 [&_blockquote]:border-[#005DDD] [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-slate-600 [&_blockquote]:my-4"
+            dangerouslySetInnerHTML={{
+              __html: project.description
+                ? project.description.includes('<')
+                  ? project.description
+                  : project.description.replace(/\n/g, '<br/>')
+                : '<p class="italic text-slate-400">Belum ada narasi proyek yang ditambahkan.</p>',
+            }}
+          />
         </div>
 
         {/* Project Meta Card */}
