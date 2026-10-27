@@ -24,6 +24,7 @@ import {
   UserCheck,
   Sparkles,
   HelpCircle,
+  FileText,
 } from 'lucide-react';
 import { ImgbbGuideModal } from '../../components/admin/ImgbbGuideModal';
 
@@ -513,6 +514,31 @@ export const AdminProjectsPage: React.FC<AdminProjectsPageProps> = ({ onNavigate
                 onChange={(e) => setClientName(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-[#005DDD]"
               />
+            </div>
+          </div>
+
+          {/* Deskripsi & Narasi Proyek */}
+          <div className="space-y-1.5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+              <label className="block text-xs uppercase font-bold text-slate-700 flex items-center gap-1.5">
+                <FileText className="w-3.5 h-3.5 text-[#005DDD]" />
+                <span>Deskripsi &amp; Narasi Proyek (Studi Kasus) *</span>
+              </label>
+              <span className="text-[11px] text-slate-400 font-medium">
+                Ditampilkan di halaman detail proyek untuk menguraikan latar belakang, konsep &amp; hasil karya
+              </span>
+            </div>
+            <textarea
+              rows={4}
+              required
+              placeholder="Ceritakan narasi proyek di sini...\nContoh:\nKampanye visual ini dirancang untuk merumuskan ulang identitas merek di platform digital. Melalui pendekatan sinematografi yang dinamis dan pewarnaan modern, kami memproduksi video komersial utama serta serangkaian aset konten media sosial yang berhasil meningkatkan engagement hingga 140%."
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-[#005DDD] leading-relaxed resize-y min-h-[110px]"
+            />
+            <div className="flex items-center justify-between text-[11px] text-slate-400">
+              <span>Mendukung teks multi-baris (enter / paragraf baru).</span>
+              <span className="font-mono text-slate-500 font-semibold">{description.length} karakter</span>
             </div>
           </div>
 
